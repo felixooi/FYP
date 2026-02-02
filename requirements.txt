@@ -15,5 +15,12 @@ joblib>=1.2.0
 # Data handling
 imbalanced-learn>=0.10.0
 
-# Future explainability (for FYP2 Phase B)
+# AWS integration (optional for local development)
+boto3>=1.26.0
+s3fs>=2023.1.0
+
+# Jupyter notebook support
+ipython>=8.0.0
+
+# Explainability (for FYP2 Phase B)
 shap>=0.42.0

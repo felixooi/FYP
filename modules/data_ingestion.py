@@ -7,20 +7,37 @@ import numpy as np
 from IPython.display import display, HTML
 
 def load_data(filepath=None, s3_bucket=None, s3_key=None):
-    "Import from local path or S3"
+    """
+    Load data from local file or AWS S3.
+    
+    Args:
+        filepath: Local file path (e.g., 'data/file.csv')
+        s3_bucket: AWS S3 bucket name
+        s3_key: S3 object key
+    
+    Returns:
+        DataFrame: Loaded dataset
+    """
     if filepath:
+        # Local file loading
         df = pd.read_csv(filepath)
         source = filepath
+        print(f"✓ Dataset loaded from local: {source}")
     elif s3_bucket and s3_key:
+        # AWS S3 loading
+        import boto3
+        from io import StringIO
+        
         s3 = boto3.client('s3')
         obj = s3.get_object(Bucket=s3_bucket, Key=s3_key)
         data = obj['Body'].read().decode('utf-8')
         df = pd.read_csv(StringIO(data))
         source = f"s3://{s3_bucket}/{s3_key}"
+        print(f"✓ Dataset loaded from S3: {source}")
     else:
-        raise ValueError("Provide either `filepath` or both `s3_bucket` and `s3_key`.")
+        raise ValueError("Provide either 'filepath' for local or both 's3_bucket' and 's3_key' for S3.")
 
-    print(f"✓ Dataset loaded from {source}: {df.shape[0]} rows, {df.shape[1]} columns")
+    print(f"  Shape: {df.shape[0]} rows × {df.shape[1]} columns")
     return df
 
 def inspect_data(df):
