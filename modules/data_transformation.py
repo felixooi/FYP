@@ -93,6 +93,43 @@ def apply_scaling(df, target_col='Resigned', method='standard'):
     
     return df_scaled, scaler
 
+
+
+def fit_scaler(df, target_col='Resigned', method='standard'):
+    'Fit a scaler on training data only and return scaler + numeric columns.'
+    X = df.drop(target_col, axis=1)
+    if method.lower() == 'standard':
+        scaler = StandardScaler()
+    elif method.lower() == 'minmax':
+        scaler = MinMaxScaler()
+    elif method.lower() == 'robust':
+        scaler = RobustScaler()
+    else:
+        print(f"Unknown method '{method}'. Using StandardScaler.")
+        scaler = StandardScaler()
+
+    numeric_cols = X.select_dtypes(include=[np.number]).columns.tolist()
+    if numeric_cols:
+        scaler.fit(X[numeric_cols])
+    return scaler, numeric_cols
+
+
+def transform_with_scaler(df, scaler, numeric_cols, target_col='Resigned'):
+    'Transform data using a pre-fitted scaler and consistent numeric columns.'
+    df_scaled = df.copy()
+    X = df_scaled.drop(target_col, axis=1)
+
+    for col in numeric_cols:
+        if col not in X.columns:
+            X[col] = 0
+
+    if numeric_cols:
+        X[numeric_cols] = scaler.transform(X[numeric_cols])
+
+    df_out = X.copy()
+    df_out[target_col] = df_scaled[target_col].values
+    return df_out
+
 def visualize_before_after(df_before, df_after, target_col='Resigned', n_features=6):
     """Visualize distributions before and after transformation."""
     print("\n" + "="*80)

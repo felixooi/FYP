@@ -1,21 +1,21 @@
 
 Model Selection Justification:
 ==============================
-Selected Model: XGBoost
+Selected Model: Logistic_Regression
 
 Selection Criteria:
-- Primary Metric: Recall = 0.9820
-- Secondary Metric: F1_Score = 0.9847
+- Primary Metric: Recall = 0.9434
+- Secondary Metric: F1_Score = 0.7823
 
 Performance Summary:
-- Accuracy: 0.9847
-- Precision: 0.9874
-- Recall: 0.9820
-- F1-Score: 0.9847
-- ROC-AUC: 0.9987
+- Accuracy: 0.9475
+- Precision: 0.6682
+- Recall: 0.9434
+- F1-Score: 0.7823
+- ROC-AUC: 0.9871
 
 Rationale:
-XGBoost achieved the highest Recall score, which is critical 
+Logistic_Regression achieved the highest Recall score, which is critical 
 for attrition prediction as missing at-risk employees is costlier than false positives.
 The model also demonstrates strong performance across other metrics, making it 
 suitable for production deployment.

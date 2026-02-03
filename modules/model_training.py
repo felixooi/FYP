@@ -18,26 +18,26 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-def train_logistic_regression(X_train, y_train, random_state=42):
+def train_logistic_regression(X_train, y_train, random_state=42, class_weight=None):
     """Train Logistic Regression with L2 regularization."""
     logging.info("Training Logistic Regression...")
     model = LogisticRegression(
         random_state=random_state,
         max_iter=1000,
         solver='lbfgs',
-        class_weight='balanced'
+        class_weight=class_weight
     )
     model.fit(X_train, y_train)
     logging.info("Logistic Regression training complete.")
     return model
 
-def train_random_forest(X_train, y_train, random_state=42):
+def train_random_forest(X_train, y_train, random_state=42, class_weight=None):
     """Train Random Forest classifier."""
     logging.info("Training Random Forest...")
     model = RandomForestClassifier(
         n_estimators=100,
         random_state=random_state,
-        class_weight='balanced',
+        class_weight=class_weight,
         n_jobs=-1
     )
     model.fit(X_train, y_train)
@@ -51,20 +51,19 @@ def train_xgboost(X_train, y_train, random_state=42):
         n_estimators=100,
         random_state=random_state,
         eval_metric='logloss',
-        use_label_encoder=False,
         n_jobs=-1
     )
     model.fit(X_train, y_train)
     logging.info("XGBoost training complete.")
     return model
 
-def train_lightgbm(X_train, y_train, random_state=42):
+def train_lightgbm(X_train, y_train, random_state=42, class_weight=None):
     """Train LightGBM classifier."""
     logging.info("Training LightGBM...")
     model = lgb.LGBMClassifier(
         n_estimators=100,
         random_state=random_state,
-        class_weight='balanced',
+        class_weight=class_weight,
         n_jobs=-1,
         verbose=-1
     )
@@ -72,22 +71,22 @@ def train_lightgbm(X_train, y_train, random_state=42):
     logging.info("LightGBM training complete.")
     return model
 
-def train_all_models(X_train, y_train, random_state=42):
+def train_all_models(X_train, y_train, random_state=42, use_class_weight=False):
     """Train all baseline models and return dictionary."""
     logging.info("==== MODEL TRAINING PIPELINE START ====")
     
     models = {
-        'Logistic_Regression': train_logistic_regression(X_train, y_train, random_state),
-        'Random_Forest': train_random_forest(X_train, y_train, random_state),
+        'Logistic_Regression': train_logistic_regression(X_train, y_train, random_state, class_weight='balanced' if use_class_weight else None),
+        'Random_Forest': train_random_forest(X_train, y_train, random_state, class_weight='balanced' if use_class_weight else None),
         'XGBoost': train_xgboost(X_train, y_train, random_state),
-        'LightGBM': train_lightgbm(X_train, y_train, random_state)
+        'LightGBM': train_lightgbm(X_train, y_train, random_state, class_weight='balanced' if use_class_weight else None)
     }
     
     logging.info(f"All {len(models)} models trained successfully.")
     logging.info("==== MODEL TRAINING PIPELINE COMPLETE ====")
     return models
 
-def save_models(models, output_dir='models'):
+def save_models(models, output_dir='models', random_state=42):
     """Save trained models to disk."""
     import os
     os.makedirs(output_dir, exist_ok=True)
@@ -100,7 +99,7 @@ def save_models(models, output_dir='models'):
     metadata = {
         'timestamp': datetime.now().isoformat(),
         'models': list(models.keys()),
-        'random_state': 42
+        'random_state': random_state
     }
     
     import json

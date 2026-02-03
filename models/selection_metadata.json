@@ -1,13 +1,13 @@
 {
-    "timestamp": "2026-02-01T22:02:54.516442",
-    "selected_model": "XGBoost",
+    "timestamp": "2026-02-03T17:12:14.805950",
+    "selected_model": "Logistic_Regression",
     "selection_criteria": "Recall (primary), F1_Score (secondary)",
     "metrics": {
-        "Model": "XGBoost",
-        "Accuracy": 0.9847390450790828,
-        "Precision": 0.9874106078665077,
-        "Recall": 0.9819973329382131,
-        "F1_Score": 0.9846965307183716,
-        "ROC_AUC": 0.9986738507193769
+        "Model": "Logistic_Regression",
+        "Accuracy": 0.9474666666666667,
+        "Precision": 0.6682397357243983,
+        "Recall": 0.9433710859427049,
+        "F1_Score": 0.7823204419889502,
+        "ROC_AUC": 0.987074375040686
     }
 }

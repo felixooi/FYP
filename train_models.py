@@ -23,15 +23,18 @@ def load_data(data_dir='data'):
     print("Loading data...")
     X_train = pd.read_csv(f'{data_dir}/train_data.csv')
     X_val = pd.read_csv(f'{data_dir}/val_data.csv')
+    X_test = pd.read_csv(f'{data_dir}/test_data.csv')
     
     y_train = X_train['Resigned']
     y_val = X_val['Resigned']
+    y_test = X_test['Resigned']
     
     X_train = X_train.drop(columns=['Resigned'])
     X_val = X_val.drop(columns=['Resigned'])
+    X_test = X_test.drop(columns=['Resigned'])
     
-    print(f"Training set: {X_train.shape}, Validation set: {X_val.shape}")
-    return X_train, X_val, y_train, y_val
+    print(f"Training set: {X_train.shape}, Validation set: {X_val.shape}, Test set: {X_test.shape}")
+    return X_train, X_val, X_test, y_train, y_val, y_test
 
 def main():
     """Execute complete model training pipeline."""
@@ -44,14 +47,14 @@ def main():
     os.makedirs('outputs', exist_ok=True)
     
     # Step 1: Load data
-    X_train, X_val, y_train, y_val = load_data()
+    X_train, X_val, X_test, y_train, y_val, y_test = load_data()
     
     # Step 2: Train all models
     print("\n" + "="*80)
     print("STEP 1: MODEL TRAINING")
     print("="*80)
-    models = train_all_models(X_train, y_train, random_state=42)
-    save_models(models, output_dir='models')
+    models = train_all_models(X_train, y_train, random_state=42, use_class_weight=False)
+    save_models(models, output_dir='models', random_state=42)
     
     # Step 3: Evaluate all models
     print("\n" + "="*80)
@@ -62,6 +65,15 @@ def main():
     print(results_df.to_string(index=False))
     
     save_evaluation_results(results_df, output_path='outputs/model_evaluation_results.csv')
+
+    # Step 2B: Evaluate all models on test set (final unbiased performance)
+    print("\n" + "="*80)
+    print("STEP 2B: TEST SET EVALUATION")
+    print("="*80)
+    test_results_df = evaluate_all_models(models, X_test, y_test)
+    print("\nTest Set Results:")
+    print(test_results_df.to_string(index=False))
+    save_evaluation_results(test_results_df, output_path='outputs/model_evaluation_results_test.csv')
     
     # Step 4: Generate visualizations
     print("\n" + "="*80)
