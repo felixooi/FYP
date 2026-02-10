@@ -4,18 +4,18 @@ Model Selection Justification:
 Selected Model: Logistic_Regression
 
 Selection Criteria:
-- Primary Metric: Recall = 0.9434
-- Secondary Metric: F1_Score = 0.7823
+- Primary: Recall (maximize)
+- Constraint: Precision >= 0.50
+- Secondary (tiebreak): PR_AUC, then F1
+- Selected threshold: 0.230
 
 Performance Summary:
-- Accuracy: 0.9475
-- Precision: 0.6682
-- Recall: 0.9434
-- F1-Score: 0.7823
-- ROC-AUC: 0.9871
+- Precision: 0.5055
+- Recall: 0.9714
+- F1-Score: 0.6650
+- PR-AUC: 0.9341
+- Threshold: 0.230
 
 Rationale:
-Logistic_Regression achieved the highest Recall score, which is critical 
-for attrition prediction as missing at-risk employees is costlier than false positives.
-The model also demonstrates strong performance across other metrics, making it 
-suitable for production deployment.
+We maximize recall under a minimum precision constraint to control false positives.
+Logistic_Regression delivers the best recall while satisfying the constraint, with strong PR-AUC and F1 support.

@@ -80,11 +80,11 @@ custom_employee = sample_employee.copy()
 #print("-"*80)
 
 # Modify key features (you can change these values)
-custom_employee['Monthly_Salary'] = 0  
-custom_employee['Employee_Satisfaction_Score'] = 0 
-custom_employee['Overtime_Hours'] = 3.5  
-custom_employee['Work_Hours_Per_Week'] = 3.5 
-custom_employee['Performance_Score'] = 0.5 
+custom_employee['Monthly_Salary'] = -1.0  
+custom_employee['Employee_Satisfaction_Score'] = 0
+custom_employee['Overtime_Hours'] = 3.0 
+custom_employee['Work_Hours_Per_Week'] = 3.0 
+custom_employee['Performance_Score'] = -1.5 
 print("Modified features:")
 print(f"  Monthly_Salary: {custom_employee['Monthly_Salary']:.4f}")
 print(f"  Employee_Satisfaction_Score: {custom_employee['Employee_Satisfaction_Score']:.4f}")

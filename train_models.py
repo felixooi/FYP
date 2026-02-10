@@ -6,6 +6,7 @@ Orchestrates training, evaluation, and selection of attrition prediction models.
 import pandas as pd
 import sys
 import os
+from sklearn.metrics import classification_report, precision_score, recall_score, f1_score
 
 # Add modules to path
 sys.path.append('modules')
@@ -94,12 +95,38 @@ def main():
     print("STEP 5: MODEL SELECTION")
     print("="*80)
     selection_results = perform_model_selection(
-        results_df, models, 
+        results_df, models,
+        X_val, y_val,
         primary_metric='Recall',
-        secondary_metric='F1_Score',
+        secondary_metric='PR_AUC',
+        precision_min=0.50,
         save_results=True,
         output_dir='models'
     )
+
+    # Step 6: Final test report at selected threshold (industry-standard)
+    print("\n" + "="*80)
+    print("STEP 6: FINAL TEST REPORT (SELECTED THRESHOLD)")
+    print("="*80)
+    best_model = selection_results['best_model']
+    threshold = selection_results['threshold']
+    y_prob_test = best_model.predict_proba(X_test)[:, 1]
+    y_pred_test = (y_prob_test >= threshold).astype(int)
+
+    report = classification_report(y_test, y_pred_test)
+    print(report)
+
+    with open('outputs/best_model_test_report.txt', 'w') as f:
+        f.write("Selected threshold: {:.3f}\n\n".format(threshold))
+        f.write(report)
+
+    test_metrics = {
+        'Precision': precision_score(y_test, y_pred_test, zero_division=0),
+        'Recall': recall_score(y_test, y_pred_test, zero_division=0),
+        'F1_Score': f1_score(y_test, y_pred_test, zero_division=0),
+        'Threshold': threshold
+    }
+    pd.DataFrame([test_metrics]).to_csv('outputs/best_model_test_metrics.csv', index=False)
     
     print("\n" + "="*80)
     print("PIPELINE COMPLETE")

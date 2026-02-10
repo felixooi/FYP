@@ -1,13 +1,15 @@
 {
-    "timestamp": "2026-02-03T17:12:14.805950",
+    "timestamp": "2026-02-10T15:22:55.563103",
     "selected_model": "Logistic_Regression",
-    "selection_criteria": "Recall (primary), F1_Score (secondary)",
+    "selection_criteria": "Recall (primary), Precision>=0.50 constraint, PR_AUC secondary",
+    "threshold": 0.23,
     "metrics": {
         "Model": "Logistic_Regression",
-        "Accuracy": 0.9474666666666667,
-        "Precision": 0.6682397357243983,
-        "Recall": 0.9433710859427049,
-        "F1_Score": 0.7823204419889502,
-        "ROC_AUC": 0.987074375040686
+        "Precision": 0.5055478502080444,
+        "Recall": 0.9713524317121919,
+        "F1_Score": 0.664994298745724,
+        "PR_AUC": 0.9340814955111743,
+        "Threshold": 0.23,
+        "Note": ""
     }
 }
