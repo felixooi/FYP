@@ -35,12 +35,23 @@ def find_best_threshold(model, X_val, y_val, precision_min=0.50, grid_size=101):
     Search thresholds to maximize recall subject to precision >= precision_min.
     Tie-break by PR-AUC then F1.
     """
-    y_prob = model.predict_proba(X_val)[:, 1]
+    # Convert to numpy for TabNet compatibility
+    if hasattr(X_val, 'values'):
+        X_val_array = X_val.values
+    else:
+        X_val_array = X_val
+    
+    if hasattr(y_val, 'values'):
+        y_val_array = y_val.values
+    else:
+        y_val_array = y_val
+    
+    y_prob = model.predict_proba(X_val_array)[:, 1]
     thresholds = np.linspace(0, 1, grid_size)
 
     best = None
     for t in thresholds:
-        m = _metrics_at_threshold(y_val, y_prob, t)
+        m = _metrics_at_threshold(y_val_array, y_prob, t)
         if m['Precision'] + 1e-12 < precision_min:
             continue
         if best is None:
@@ -55,7 +66,7 @@ def find_best_threshold(model, X_val, y_val, precision_min=0.50, grid_size=101):
                     best = m
     if best is None:
         # If no threshold meets precision constraint, fall back to default 0.5 metrics
-        best = _metrics_at_threshold(y_val, y_prob, 0.5)
+        best = _metrics_at_threshold(y_val_array, y_prob, 0.5)
         best['note'] = 'Precision constraint not met; fallback to threshold=0.5'
     best['y_prob'] = y_prob
     return best

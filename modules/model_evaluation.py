@@ -22,16 +22,27 @@ def evaluate_model(model, X_val, y_val, model_name='Model'):
     """Evaluate a single model and return metrics dictionary."""
     logging.info(f"Evaluating {model_name}...")
     
-    y_pred = model.predict(X_val)
-    y_pred_proba = model.predict_proba(X_val)[:, 1]
+    # Convert to numpy for TabNet compatibility
+    if hasattr(X_val, 'values'):
+        X_val_array = X_val.values
+    else:
+        X_val_array = X_val
+    
+    if hasattr(y_val, 'values'):
+        y_val_array = y_val.values
+    else:
+        y_val_array = y_val
+    
+    y_pred = model.predict(X_val_array)
+    y_pred_proba = model.predict_proba(X_val_array)[:, 1]
     
     metrics = {
         'Model': model_name,
-        'Accuracy': accuracy_score(y_val, y_pred),
-        'Precision': precision_score(y_val, y_pred),
-        'Recall': recall_score(y_val, y_pred),
-        'F1_Score': f1_score(y_val, y_pred),
-        'ROC_AUC': roc_auc_score(y_val, y_pred_proba)
+        'Accuracy': accuracy_score(y_val_array, y_pred),
+        'Precision': precision_score(y_val_array, y_pred),
+        'Recall': recall_score(y_val_array, y_pred),
+        'F1_Score': f1_score(y_val_array, y_pred),
+        'ROC_AUC': roc_auc_score(y_val_array, y_pred_proba)
     }
     
     logging.info(f"{model_name} - Recall: {metrics['Recall']:.4f}, F1: {metrics['F1_Score']:.4f}, ROC-AUC: {metrics['ROC_AUC']:.4f}")
@@ -86,9 +97,20 @@ def plot_confusion_matrices(models, X_val, y_val, output_path='outputs/confusion
     if n_models == 1:
         axes = [axes]
     
+    # Convert to numpy for TabNet compatibility
+    if hasattr(X_val, 'values'):
+        X_val_array = X_val.values
+    else:
+        X_val_array = X_val
+    
+    if hasattr(y_val, 'values'):
+        y_val_array = y_val.values
+    else:
+        y_val_array = y_val
+    
     for idx, (name, model) in enumerate(models.items()):
-        y_pred = model.predict(X_val)
-        cm = confusion_matrix(y_val, y_pred)
+        y_pred = model.predict(X_val_array)
+        cm = confusion_matrix(y_val_array, y_pred)
         
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[idx], 
                    cbar=False, square=True)
@@ -105,10 +127,21 @@ def plot_roc_curves(models, X_val, y_val, output_path='outputs/roc_curves.png'):
     """Plot ROC curves for all models."""
     plt.figure(figsize=(10, 8))
     
+    # Convert to numpy for TabNet compatibility
+    if hasattr(X_val, 'values'):
+        X_val_array = X_val.values
+    else:
+        X_val_array = X_val
+    
+    if hasattr(y_val, 'values'):
+        y_val_array = y_val.values
+    else:
+        y_val_array = y_val
+    
     for name, model in models.items():
-        y_pred_proba = model.predict_proba(X_val)[:, 1]
-        fpr, tpr, _ = roc_curve(y_val, y_pred_proba)
-        auc = roc_auc_score(y_val, y_pred_proba)
+        y_pred_proba = model.predict_proba(X_val_array)[:, 1]
+        fpr, tpr, _ = roc_curve(y_val_array, y_pred_proba)
+        auc = roc_auc_score(y_val_array, y_pred_proba)
         plt.plot(fpr, tpr, label=f'{name} (AUC = {auc:.4f})', linewidth=2)
     
     plt.plot([0, 1], [0, 1], 'k--', label='Random Classifier', linewidth=1)
@@ -124,12 +157,23 @@ def plot_roc_curves(models, X_val, y_val, output_path='outputs/roc_curves.png'):
 
 def generate_classification_reports(models, X_val, y_val):
     """Generate detailed classification reports for all models."""
+    # Convert to numpy for TabNet compatibility
+    if hasattr(X_val, 'values'):
+        X_val_array = X_val.values
+    else:
+        X_val_array = X_val
+    
+    if hasattr(y_val, 'values'):
+        y_val_array = y_val.values
+    else:
+        y_val_array = y_val
+    
     reports = {}
     for name, model in models.items():
-        y_pred = model.predict(X_val)
-        report = classification_report(y_val, y_pred, output_dict=True)
+        y_pred = model.predict(X_val_array)
+        report = classification_report(y_val_array, y_pred, output_dict=True)
         reports[name] = report
-        logging.info(f"\n{name} Classification Report:\n{classification_report(y_val, y_pred)}")
+        logging.info(f"\n{name} Classification Report:\n{classification_report(y_val_array, y_pred)}")
     return reports
 
 def save_evaluation_results(results_df, output_path='outputs/model_evaluation_results.csv'):

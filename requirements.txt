@@ -9,6 +9,10 @@ seaborn>=0.12.0
 xgboost>=1.7.0
 lightgbm>=3.3.0
 
+# Advanced model (Deep Learning)
+pytorch-tabnet>=4.0
+torch>=1.13.0
+
 # Model persistence
 joblib>=1.2.0
 

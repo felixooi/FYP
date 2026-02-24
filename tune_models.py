@@ -18,6 +18,7 @@ import xgboost as xgb
 import joblib
 
 from modules.model_selection import find_best_threshold
+from modules.feature_engineering import fit_workload_feature_params
 
 
 def constrained_recall_scorer(estimator, X, y, precision_min=0.50, grid_size=101):
@@ -55,15 +56,35 @@ def load_data(data_dir="data"):
     return X_train, X_val, X_test, y_train, y_val, y_test
 
 
+def save_feature_engineering_params(
+    cleaned_data_path="data/cleaned_data.csv",
+    output_path="models/feature_engineering_params.json",
+):
+    """
+    Persist feature-engineering params for inference.
+    Uses cleaned_data.csv when available.
+    """
+    if not os.path.exists(cleaned_data_path):
+        return None
+
+    df_clean = pd.read_csv(cleaned_data_path)
+    params = fit_workload_feature_params(df_clean)
+    with open(output_path, "w") as f:
+        json.dump(params, f, indent=4)
+    return output_path
+
+
 def main():
     os.makedirs("models", exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
 
     X_train, X_val, X_test, y_train, y_val, y_test = load_data()
 
-    precision_min = 0.50
-    scorer = lambda est, X, y: constrained_recall_scorer(est, X, y, precision_min=precision_min)
+    # Base tuning objective; operating-point sweep is applied after tuning.
+    base_precision_min = 0.50
+    scorer = lambda est, X, y: constrained_recall_scorer(est, X, y, precision_min=base_precision_min)
     cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
+    precision_constraints = [0.50, 0.60, 0.70]
 
     models = {
         "Logistic_Regression": (
@@ -115,37 +136,65 @@ def main():
         best_model = search.best_estimator_
         best_models[name] = best_model
 
-        # Threshold tuning on validation set
-        tuned = find_best_threshold(best_model, X_val, y_val, precision_min=precision_min)
-
         results.append({
             "Model": name,
             "Best_Params": search.best_params_,
-            "CV_Best_Recall": search.best_score_,
-            "Val_Precision": tuned["Precision"],
-            "Val_Recall": tuned["Recall"],
-            "Val_F1": tuned["F1_Score"],
-            "Val_PR_AUC": tuned["PR_AUC"],
-            "Threshold": tuned["Threshold"],
-            "Note": tuned.get("note", "")
+            "CV_Best_Recall": search.best_score_
         })
 
-    results_df = pd.DataFrame(results).sort_values(
-        by=["Val_Recall", "Val_PR_AUC", "Val_F1"],
+    tuned_df = pd.DataFrame(results)
+
+    # Precision-constraint sweep on validation + test metrics for comparison
+    sweep_rows = []
+    for _, base_row in tuned_df.iterrows():
+        name = base_row["Model"]
+        model = best_models[name]
+        y_prob_val = model.predict_proba(X_val)[:, 1]
+        y_prob_test = model.predict_proba(X_test)[:, 1]
+        for precision_min in precision_constraints:
+            tuned = find_best_threshold(model, X_val, y_val, precision_min=precision_min)
+            threshold = float(tuned["Threshold"])
+            y_pred_test = (y_prob_test >= threshold).astype(int)
+            sweep_rows.append({
+                "Model": name,
+                "Precision_Constraint": precision_min,
+                "Threshold": threshold,
+                "Val_Precision": float(tuned["Precision"]),
+                "Val_Recall": float(tuned["Recall"]),
+                "Val_F1": float(tuned["F1_Score"]),
+                "Val_PR_AUC": float(tuned["PR_AUC"]),
+                "Test_Precision": float(precision_score(y_test, y_pred_test, zero_division=0)),
+                "Test_Recall": float(recall_score(y_test, y_pred_test, zero_division=0)),
+                "Test_F1": float(f1_score(y_test, y_pred_test, zero_division=0)),
+                "Test_PR_AUC": float(average_precision_score(y_test, y_prob_test)),
+                "Note": tuned.get("note", ""),
+                "Best_Params": base_row["Best_Params"],
+                "CV_Best_Recall": float(base_row["CV_Best_Recall"])
+            })
+
+    sweep_df = pd.DataFrame(sweep_rows).sort_values(
+        by=["Val_F1", "Val_Recall", "Val_PR_AUC"],
         ascending=False
     ).reset_index(drop=True)
+    sweep_df.to_csv("outputs/precision_constraint_sweep.csv", index=False)
+    print("Saved: outputs/precision_constraint_sweep.csv")
 
-    # Select best model using the same criteria
-    best_row = results_df.iloc[0]
+    # Final selection from validation sweep (no test leakage in selection)
+    best_row = sweep_df.iloc[0]
     best_name = best_row["Model"]
     best_model = best_models[best_name]
+    selected_constraint = float(best_row["Precision_Constraint"])
 
     # Save best model and metadata
     joblib.dump(best_model, f"models/best_model_tuned.pkl")
     metadata = {
         "timestamp": datetime.now().isoformat(),
         "selected_model": best_name,
-        "selection_criteria": f"Recall (primary), Precision>={precision_min:.2f} constraint, PR_AUC secondary",
+        "selection_criteria": (
+            "Validation sweep: maximize Val_F1 across precision constraints "
+            f"{precision_constraints}, tie-break by Val_Recall then Val_PR_AUC"
+        ),
+        "selected_precision_constraint": selected_constraint,
         "threshold": float(best_row["Threshold"]),
         "best_params": best_row["Best_Params"],
         "cv_best_recall": float(best_row["CV_Best_Recall"]),
@@ -159,9 +208,18 @@ def main():
     with open("models/tuning_metadata.json", "w") as f:
         json.dump(metadata, f, indent=4)
 
-    results_df.to_csv("outputs/tuning_results.csv", index=False)
+    fe_params_output = save_feature_engineering_params()
+    if fe_params_output:
+        print(f"Saved: {fe_params_output}")
+    else:
+        print("Warning: feature engineering params not saved (missing data/cleaned_data.csv)")
+
+    tuned_df.to_csv("outputs/tuning_results.csv", index=False)
     print("\nTuning complete. Results saved to outputs/tuning_results.csv")
-    print(results_df.to_string(index=False))
+    print(sweep_df[[
+        "Model", "Precision_Constraint", "Val_Precision", "Val_Recall",
+        "Val_F1", "Val_PR_AUC", "Threshold"
+    ]].to_string(index=False))
 
     # Final test report at selected threshold
     threshold = float(best_row["Threshold"])
@@ -173,6 +231,7 @@ def main():
     report = classification_report(y_test, y_pred_test, digits=4)
     with open("outputs/final_model_test_report.txt", "w") as f:
         f.write(f"Selected model: {best_name}\n")
+        f.write(f"Selected precision constraint: >= {selected_constraint:.2f}\n")
         f.write(f"Selected threshold: {threshold:.3f}\n\n")
         f.write(report)
 
@@ -180,6 +239,7 @@ def main():
     val_brier = brier_score_loss(y_val, y_prob_val)
     test_metrics = {
         "Model": best_name,
+        "Precision_Constraint": selected_constraint,
         "Threshold": threshold,
         "Precision": precision_score(y_test, y_pred_test, zero_division=0),
         "Recall": recall_score(y_test, y_pred_test, zero_division=0),
@@ -208,8 +268,11 @@ def main():
         "===========================\n"
         "Business objective prioritizes catching at-risk employees (high recall),\n"
         "while keeping operational load manageable.\n"
-        "Constraint used: Precision >= 0.50.\n"
-        "Interpretation: at least 1 in 2 flagged employees is expected to truly resign,\n"
+        f"Constraint sweep used: {precision_constraints}.\n"
+        f"Selected constraint: Precision >= {selected_constraint:.2f}.\n"
+        "Interpretation: selected operating point balances false-positive workload for HR\n"
+        "and recall of at-risk employees using validation-first model selection.\n"
+        "For Precision >= 0.50, at least 1 in 2 flagged employees is expected to truly resign,\n"
         "which bounds false-positive workload for HR while preserving high recall.\n"
     )
     with open("models/threshold_rationale.txt", "w") as f:
@@ -221,8 +284,10 @@ def main():
         f"- Generated: {datetime.now().isoformat()}\n"
         f"- Model: {best_name}\n"
         f"- Model file: `models/best_model_tuned.pkl`\n"
+        f"- Selected precision constraint: >= {selected_constraint:.2f}\n"
         f"- Threshold: {threshold:.3f}\n"
-        f"- Selection rule: maximize recall with precision >= {precision_min:.2f}, then PR-AUC and F1\n\n"
+        "- Selection rule: validation sweep over precision constraints; maximize Val_F1, "
+        "tie-break by Val_Recall then Val_PR_AUC\n\n"
         "## Data Summary\n"
         f"- Train samples: {len(y_train)}\n"
         f"- Validation samples: {len(y_val)}\n"
@@ -245,6 +310,7 @@ def main():
         "## Artifact Index\n"
         "- `outputs/final_model_test_report.txt`\n"
         "- `outputs/final_model_test_metrics.csv`\n"
+        "- `outputs/precision_constraint_sweep.csv`\n"
         "- `outputs/final_model_validation_calibration.png`\n"
         "- `models/tuning_metadata.json`\n"
         "- `models/threshold_rationale.txt`\n"

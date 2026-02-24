@@ -1,0 +1,10 @@
+{
+    "overtime_hours_max": 156.4,
+    "projects_handled_max": 14.0,
+    "overtime_hours_q75": 1.5,
+    "sick_days_q75": 4.0,
+    "monthly_salary_mean": 6654.7265853,
+    "monthly_salary_std": 3316.94411901683,
+    "performance_score_mean": 3.6367087,
+    "performance_score_std": 0.6392023780784232
+}

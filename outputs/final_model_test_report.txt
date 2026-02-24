@@ -1,11 +1,12 @@
 Selected model: Logistic_Regression
-Selected threshold: 0.280
+Selected precision constraint: >= 0.70
+Selected threshold: 0.550
 
               precision    recall  f1-score   support
 
-           0     0.9954    0.8929    0.9413     17998
-           1     0.4999    0.9625    0.6580      2002
+           0     0.9918    0.9568    0.9740     17998
+           1     0.7053    0.9291    0.8019      2002
 
-    accuracy                         0.8999     20000
-   macro avg     0.7476    0.9277    0.7997     20000
-weighted avg     0.9458    0.8999    0.9130     20000
+    accuracy                         0.9540     20000
+   macro avg     0.8486    0.9429    0.8880     20000
+weighted avg     0.9631    0.9540    0.9568     20000

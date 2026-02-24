@@ -12,6 +12,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
 import lightgbm as lgb
+import torch
 
 logging.basicConfig(
     level=logging.INFO,
@@ -71,9 +72,53 @@ def train_lightgbm(X_train, y_train, random_state=42, class_weight=None):
     logging.info("LightGBM training complete.")
     return model
 
+def train_tabnet(X_train, y_train, random_state=42):
+    """Train TabNet classifier with attention mechanism (Advanced Tier - Deep Learning)."""
+    logging.info("Training TabNet (Advanced Tier - Deep Learning)...")
+    
+    try:
+        from pytorch_tabnet.tab_model import TabNetClassifier
+    except ImportError:
+        logging.error("pytorch-tabnet not installed. Run: pip install pytorch-tabnet")
+        raise
+    
+    # Set random seeds for reproducibility
+    torch.manual_seed(random_state)
+    np.random.seed(random_state)
+    
+    model = TabNetClassifier(
+        n_d=64,                    # Width of decision prediction layer
+        n_a=64,                    # Width of attention embedding
+        n_steps=5,                 # Number of decision steps
+        gamma=1.5,                 # Relaxation parameter for feature reuse
+        n_independent=2,           # Number of independent GLU layers
+        n_shared=2,                # Number of shared GLU layers
+        lambda_sparse=1e-4,        # Sparsity regularization
+        optimizer_fn=torch.optim.Adam,
+        optimizer_params=dict(lr=2e-2),
+        scheduler_params={"step_size":50, "gamma":0.9},
+        scheduler_fn=torch.optim.lr_scheduler.StepLR,
+        mask_type='entmax',        # Attention mask type
+        verbose=0,
+        seed=random_state
+    )
+    
+    # Train with early stopping
+    model.fit(
+        X_train.values, y_train.values,
+        max_epochs=100,
+        patience=20,
+        batch_size=1024,
+        virtual_batch_size=128
+    )
+    
+    logging.info("TabNet training complete.")
+    return model
+
 def train_all_models(X_train, y_train, random_state=42, use_class_weight=False):
-    """Train all baseline models and return dictionary."""
+    """Train all baseline and advanced models and return dictionary."""
     logging.info("==== MODEL TRAINING PIPELINE START ====")
+    logging.info("Training Baseline Models (Traditional ML)...")
     
     models = {
         'Logistic_Regression': train_logistic_regression(X_train, y_train, random_state, class_weight='balanced' if use_class_weight else None),
@@ -81,6 +126,13 @@ def train_all_models(X_train, y_train, random_state=42, use_class_weight=False):
         'XGBoost': train_xgboost(X_train, y_train, random_state),
         'LightGBM': train_lightgbm(X_train, y_train, random_state, class_weight='balanced' if use_class_weight else None)
     }
+    
+    logging.info("Training Advanced Model (Deep Learning)...")
+    try:
+        models['TabNet'] = train_tabnet(X_train, y_train, random_state)
+    except Exception as e:
+        logging.warning(f"TabNet training failed: {e}")
+        logging.warning("Continuing with baseline models only.")
     
     logging.info(f"All {len(models)} models trained successfully.")
     logging.info("==== MODEL TRAINING PIPELINE COMPLETE ====")
