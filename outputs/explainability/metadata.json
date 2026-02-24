@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-02-24T21:22:27.908660",
+  "model_name": "Logistic_Regression",
+  "threshold": 0.55,
+  "dataset_source": "data/test_data.csv",
+  "preprocessing_mode": "inference_preprocessing::not_applicable_preprocessed_input",
+  "n_samples": 20000,
+  "n_features": 20,
+  "top_3_features": [
+    "Employee_Satisfaction_Score",
+    "Workload_Intensity",
+    "Work_Hours_Per_Week"
+  ],
+  "outputs": {
+    "global": "outputs/explainability/global/",
+    "local": "outputs/explainability/local/",
+    "explainer": "outputs/explainability/explainers/"
+  }
+}

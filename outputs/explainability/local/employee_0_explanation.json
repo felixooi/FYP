@@ -1,0 +1,78 @@
+{
+  "employee_index": 0,
+  "prediction_probability": 0.6453927101311322,
+  "actual_resigned": 0,
+  "risk_level": "MEDIUM",
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "threshold": 0.55,
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -4.170266030180992,
+      "shap_value": 7.990846633911133,
+      "impact_score_units": 7.990846633911133
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -7.722517393463785,
+      "shap_value": 2.781792163848877,
+      "impact_score_units": 2.781792163848877
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -2.4384232477066456,
+      "shap_value": 2.1924901008605957,
+      "impact_score_units": 2.1924901008605957
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": -11.258108670691804,
+      "shap_value": 0.8629724383354187,
+      "impact_score_units": 0.8629724383354187
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 1.0982233887049426,
+      "shap_value": 0.7209894061088562,
+      "impact_score_units": 0.7209894061088562
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": -18.177754675264776,
+      "shap_value": -8.04977798461914,
+      "impact_score_units": -8.04977798461914
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": -8.914059612839402,
+      "shap_value": -4.259413242340088,
+      "impact_score_units": -4.259413242340088
+    },
+    {
+      "feature": "Project_Load",
+      "feature_value": -13.719737626045776,
+      "shap_value": -1.0524452924728394,
+      "impact_score_units": -1.0524452924728394
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": -2.0942994180752987,
+      "shap_value": -0.49185556173324585,
+      "impact_score_units": -0.49185556173324585
+    },
+    {
+      "feature": "Burnout_Risk",
+      "feature_value": -4.568491530694201,
+      "shap_value": -0.3710595369338989,
+      "impact_score_units": -0.3710595369338989
+    }
+  ],
+  "explanation_text": "This employee is classified as MEDIUM RISK of attrition (probability: 64.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-4.17), with SHAP impact 7.991 score units. Additionally, performance score (-7.72) and training hours (-2.44) further elevate the risk with SHAP impacts 2.782 and 2.192 respectively.\n\nPositive factors such as workload intensity (-18.18) and work hours per week (-8.91) help reduce the overall risk (SHAP impacts -8.050 and -4.259 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "visualizations": {
+    "waterfall_plot": "outputs/explainability/local/employee_0_waterfall.png",
+    "contributions_table": "outputs/explainability/local/employee_0_contributions.csv"
+  }
+}

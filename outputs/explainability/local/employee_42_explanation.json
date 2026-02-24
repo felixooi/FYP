@@ -1,0 +1,78 @@
+{
+  "employee_index": 42,
+  "prediction_probability": 0.0011249098400134053,
+  "actual_resigned": 0,
+  "risk_level": "LOW",
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "threshold": 0.55,
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 0.3381400699580483,
+      "shap_value": 0.16894423961639404,
+      "impact_score_units": 0.16894423961639404
+    },
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": -0.5535657369818608,
+      "shap_value": 0.05754022300243378,
+      "impact_score_units": 0.05754022300243378
+    },
+    {
+      "feature": "Is_Underutilized",
+      "feature_value": -0.6931102064331334,
+      "shap_value": 0.04325868934392929,
+      "impact_score_units": 0.04325868934392929
+    },
+    {
+      "feature": "Training_Per_Year",
+      "feature_value": -0.2221431938371799,
+      "shap_value": 0.013296408578753471,
+      "impact_score_units": 0.013296408578753471
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": -0.1879202206697181,
+      "shap_value": 0.00828144047409296,
+      "impact_score_units": 0.00828144047409296
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": 0.1732305730765252,
+      "shap_value": -2.1102020740509033,
+      "impact_score_units": -2.1102020740509033
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": 1.435031202391146,
+      "shap_value": -1.6819207668304443,
+      "impact_score_units": -1.6819207668304443
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": 1.4106040087821807,
+      "shap_value": -1.6519508361816406,
+      "impact_score_units": -1.6519508361816406
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": -0.5178279533808111,
+      "shap_value": -0.36917659640312195,
+      "impact_score_units": -0.36917659640312195
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.2996040995037484,
+      "shap_value": -0.2189677208662033,
+      "impact_score_units": -0.2189677208662033
+    }
+  ],
+  "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 0.1%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is tenure performance (ratio) (0.34), with SHAP impact 0.169 score units. Additionally, monthly salary (-0.55) and is underutilized (-0.69) further elevate the risk with SHAP impacts 0.058 and 0.043 respectively.\n\nPositive factors such as employee satisfaction score (0.17) and promotions (1.44) help reduce the overall risk (SHAP impacts -2.110 and -1.682 respectively).",
+  "visualizations": {
+    "waterfall_plot": "outputs/explainability/local/employee_42_waterfall.png",
+    "contributions_table": "outputs/explainability/local/employee_42_contributions.csv"
+  }
+}

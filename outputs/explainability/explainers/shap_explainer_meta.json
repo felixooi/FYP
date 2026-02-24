@@ -1,0 +1,28 @@
+{
+  "model_name": "Logistic_Regression",
+  "model_type": "linear",
+  "feature_names": [
+    "Employee_Satisfaction_Score",
+    "Burnout_Risk",
+    "Workload_Intensity",
+    "Performance_Score",
+    "Work_Hours_Per_Week",
+    "Training_Hours",
+    "Work_Life_Balance",
+    "Salary_Performance_Gap",
+    "Training_Per_Year",
+    "Project_Load",
+    "Tenure_Performance_Ratio",
+    "Overtime_Ratio",
+    "Promotions",
+    "Projects_Handled",
+    "Is_Underutilized",
+    "Overtime_Hours",
+    "Is_Overworked",
+    "Sick_Days",
+    "Monthly_Salary",
+    "Age"
+  ],
+  "background_hash": "1e2231f670463bb90a15fbd4bec1204c",
+  "model_hash": "4ee7246722f4106168a4bf61e3addc4a"
+}
