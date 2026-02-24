@@ -1,0 +1,7 @@
+Threshold Selection Rationale
+===========================
+Business objective prioritizes catching at-risk employees (high recall),
+while keeping operational load manageable.
+Constraint used: Precision >= 0.50.
+Interpretation: at least 1 in 2 flagged employees is expected to truly resign,
+which bounds false-positive workload for HR while preserving high recall.

@@ -1,5 +1,5 @@
 {
-    "timestamp": "2026-02-10T19:35:31.248936",
+    "timestamp": "2026-02-24T13:59:45.366946",
     "selected_model": "Logistic_Regression",
     "selection_criteria": "Recall (primary), Precision>=0.50 constraint, PR_AUC secondary",
     "threshold": 0.28,

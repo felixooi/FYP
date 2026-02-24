@@ -9,10 +9,11 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold, RandomizedSearchCV
-from sklearn.metrics import average_precision_score, precision_score, recall_score, f1_score, classification_report
+from sklearn.metrics import average_precision_score, precision_score, recall_score, f1_score, classification_report, brier_score_loss
+from sklearn.calibration import calibration_curve
 from scipy.stats import loguniform, randint, uniform
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
 import xgboost as xgb
 import joblib
 
@@ -164,25 +165,108 @@ def main():
 
     # Final test report at selected threshold
     threshold = float(best_row["Threshold"])
+    y_prob_val = best_model.predict_proba(X_val)[:, 1]
     y_prob_test = best_model.predict_proba(X_test)[:, 1]
     y_pred_test = (y_prob_test >= threshold).astype(int)
+    y_pred_val = (y_prob_val >= threshold).astype(int)
 
     report = classification_report(y_test, y_pred_test, digits=4)
-    with open("outputs/tuned_best_model_test_report.txt", "w") as f:
+    with open("outputs/final_model_test_report.txt", "w") as f:
         f.write(f"Selected model: {best_name}\n")
         f.write(f"Selected threshold: {threshold:.3f}\n\n")
         f.write(report)
 
+    test_pr_auc = average_precision_score(y_test, y_prob_test)
+    val_brier = brier_score_loss(y_val, y_prob_val)
     test_metrics = {
         "Model": best_name,
         "Threshold": threshold,
         "Precision": precision_score(y_test, y_pred_test, zero_division=0),
         "Recall": recall_score(y_test, y_pred_test, zero_division=0),
-        "F1_Score": f1_score(y_test, y_pred_test, zero_division=0)
+        "F1_Score": f1_score(y_test, y_pred_test, zero_division=0),
+        "PR_AUC": test_pr_auc,
+        "Validation_Brier_Score": val_brier
     }
-    pd.DataFrame([test_metrics]).to_csv("outputs/tuned_best_model_test_metrics.csv", index=False)
-    print("Saved: outputs/tuned_best_model_test_report.txt")
-    print("Saved: outputs/tuned_best_model_test_metrics.csv")
+    pd.DataFrame([test_metrics]).to_csv("outputs/final_model_test_metrics.csv", index=False)
+
+    # Validation calibration plot for probability reliability
+    frac_pos, mean_pred = calibration_curve(y_val, y_prob_val, n_bins=10, strategy="quantile")
+    plt.figure(figsize=(6, 6))
+    plt.plot([0, 1], [0, 1], "k--", label="Perfectly calibrated")
+    plt.plot(mean_pred, frac_pos, marker="o", linewidth=2, label=f"{best_name}")
+    plt.xlabel("Mean predicted probability")
+    plt.ylabel("Fraction of positives")
+    plt.title("Validation Calibration Curve")
+    plt.legend(loc="best")
+    plt.tight_layout()
+    plt.savefig("outputs/final_model_validation_calibration.png", dpi=300, bbox_inches="tight")
+    plt.close()
+
+    # Threshold rationale for viva/readability
+    threshold_rationale = (
+        "Threshold Selection Rationale\n"
+        "===========================\n"
+        "Business objective prioritizes catching at-risk employees (high recall),\n"
+        "while keeping operational load manageable.\n"
+        "Constraint used: Precision >= 0.50.\n"
+        "Interpretation: at least 1 in 2 flagged employees is expected to truly resign,\n"
+        "which bounds false-positive workload for HR while preserving high recall.\n"
+    )
+    with open("models/threshold_rationale.txt", "w") as f:
+        f.write(threshold_rationale)
+
+    # Model card: one-page deployment/evaluation summary
+    model_card = (
+        "# Final Model Card\n\n"
+        f"- Generated: {datetime.now().isoformat()}\n"
+        f"- Model: {best_name}\n"
+        f"- Model file: `models/best_model_tuned.pkl`\n"
+        f"- Threshold: {threshold:.3f}\n"
+        f"- Selection rule: maximize recall with precision >= {precision_min:.2f}, then PR-AUC and F1\n\n"
+        "## Data Summary\n"
+        f"- Train samples: {len(y_train)}\n"
+        f"- Validation samples: {len(y_val)}\n"
+        f"- Test samples: {len(y_test)}\n"
+        f"- Features used: {X_train.shape[1]}\n"
+        f"- Class balance (train, positive rate): {float(y_train.mean()):.4f}\n"
+        f"- Class balance (validation, positive rate): {float(y_val.mean()):.4f}\n"
+        f"- Class balance (test, positive rate): {float(y_test.mean()):.4f}\n\n"
+        "## Validation Performance (selected threshold)\n"
+        f"- Precision: {precision_score(y_val, y_pred_val, zero_division=0):.4f}\n"
+        f"- Recall: {recall_score(y_val, y_pred_val, zero_division=0):.4f}\n"
+        f"- F1: {f1_score(y_val, y_pred_val, zero_division=0):.4f}\n"
+        f"- PR-AUC: {average_precision_score(y_val, y_prob_val):.4f}\n"
+        f"- Brier score: {val_brier:.4f}\n\n"
+        "## Test Performance (selected threshold)\n"
+        f"- Precision: {test_metrics['Precision']:.4f}\n"
+        f"- Recall: {test_metrics['Recall']:.4f}\n"
+        f"- F1: {test_metrics['F1_Score']:.4f}\n"
+        f"- PR-AUC: {test_metrics['PR_AUC']:.4f}\n\n"
+        "## Artifact Index\n"
+        "- `outputs/final_model_test_report.txt`\n"
+        "- `outputs/final_model_test_metrics.csv`\n"
+        "- `outputs/final_model_validation_calibration.png`\n"
+        "- `models/tuning_metadata.json`\n"
+        "- `models/threshold_rationale.txt`\n"
+    )
+    with open("models/final_model_card.md", "w") as f:
+        f.write(model_card)
+
+    # Consolidate artifacts: remove legacy names to avoid confusion
+    for legacy_path in [
+        "outputs/tuned_best_model_test_report.txt",
+        "outputs/tuned_best_model_test_metrics.csv",
+        "outputs/best_model_test_report.txt",
+        "outputs/best_model_test_metrics.csv",
+    ]:
+        if os.path.exists(legacy_path):
+            os.remove(legacy_path)
+
+    print("Saved: outputs/final_model_test_report.txt")
+    print("Saved: outputs/final_model_test_metrics.csv")
+    print("Saved: outputs/final_model_validation_calibration.png")
+    print("Saved: models/final_model_card.md")
+    print("Saved: models/threshold_rationale.txt")
 
 
 if __name__ == "__main__":

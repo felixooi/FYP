@@ -38,6 +38,11 @@ pip install -r requirements.txt
 python train_models.py
 ```
 
+### 2b. Run Hyperparameter Tuning (Recommended Final Selection)
+```bash
+python tune_models.py
+```
+
 ### 3. Outputs Generated
 
 **Models** (saved in `models/`):
@@ -58,6 +63,15 @@ python train_models.py
 **Reports**:
 - `outputs/model_evaluation_results.csv` - Detailed metrics table
 
+**Final consolidated artifacts (from `tune_models.py`)**:
+- `outputs/final_model_test_report.txt`
+- `outputs/final_model_test_metrics.csv`
+- `outputs/final_model_validation_calibration.png`
+- `models/final_model_card.md`
+- `models/threshold_rationale.txt`
+
+These are the canonical final evaluation outputs to reference in report writing.
+
 ## Evaluation Metrics
 
 ### Primary Metrics (Priority Order)
@@ -69,6 +83,7 @@ python train_models.py
 
 ### Rationale
 Recall is prioritized because **missing an at-risk employee is costlier than a false positive** in HR decision-making context.
+The final threshold rule also enforces `Precision >= 0.50` to cap false-positive workload.
 
 ## Model Selection Logic
 ```python
