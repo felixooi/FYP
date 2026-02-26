@@ -1,0 +1,66 @@
+{
+  "employee_index": 6378,
+  "prediction_probability": 1.0,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": 1,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 45.95386769336738,
+      "shap_value": 19.84214973449707
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -6.862414782360163,
+      "shap_value": 14.251591682434082
+    },
+    {
+      "feature": "Project_Load",
+      "feature_value": 42.56852082862786,
+      "shap_value": 3.1756386756896973
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -2.616610237910616,
+      "shap_value": 2.37046480178833
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -2.5536726910952154,
+      "shap_value": 2.346393585205078
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": -8.403481719285672,
+      "shap_value": -4.020177364349365
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -1.1389516092562737,
+      "shap_value": -0.903860867023468
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -2.414670777292213,
+      "shap_value": -0.33764955401420593
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": 4.163051252375371,
+      "shap_value": -0.28359925746917725
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": -0.023133431496578708,
+      "shap_value": -0.07265225797891617
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 100.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is workload intensity (45.95), with SHAP impact 19.842 score units. Additionally, employee satisfaction score (-6.86) and project load (42.57) further elevate the risk with SHAP impacts 14.252 and 3.176 respectively.\n\nPositive factors such as work hours per week (-8.40) and tenure performance (ratio) (-1.14) help reduce the overall risk (SHAP impacts -4.020 and -0.904 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_6378_contributions.csv"
+}

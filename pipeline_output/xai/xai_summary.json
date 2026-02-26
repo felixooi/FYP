@@ -1,0 +1,15 @@
+{
+  "base_value": -0.4001726008061852,
+  "global_sample_size": 1000,
+  "global_feature_importance_csv": "pipeline_output\\xai\\global\\feature_importance.csv",
+  "global_feature_importance_json": "pipeline_output\\xai\\global\\feature_importance.json",
+  "local_explanations_summary_csv": "pipeline_output\\xai\\local\\local_explanations_summary.csv",
+  "local_explanation_files": [
+    "pipeline_output\\xai\\local\\employee_11139_explanation.json",
+    "pipeline_output\\xai\\local\\employee_6378_explanation.json"
+  ],
+  "local_contribution_files": [
+    "pipeline_output\\xai\\local\\employee_11139_contributions.csv",
+    "pipeline_output\\xai\\local\\employee_6378_contributions.csv"
+  ]
+}

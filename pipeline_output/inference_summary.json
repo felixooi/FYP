@@ -1,0 +1,26 @@
+{
+    "input_rows": 20000,
+    "model_path": "models/best_model_tuned.pkl",
+    "threshold": 0.55,
+    "predicted_resigned_count": 14675,
+    "predicted_stayed_count": 5325,
+    "mean_attrition_probability": 0.738899508556914,
+    "used_feature_count": 20,
+    "feature_engineering_param_source": "not_applicable_preprocessed_input",
+    "predictions_path": "pipeline_output\\inference_predictions.csv",
+    "xai": {
+        "base_value": -0.4001726008061852,
+        "global_sample_size": 1000,
+        "global_feature_importance_csv": "pipeline_output\\xai\\global\\feature_importance.csv",
+        "global_feature_importance_json": "pipeline_output\\xai\\global\\feature_importance.json",
+        "local_explanations_summary_csv": "pipeline_output\\xai\\local\\local_explanations_summary.csv",
+        "local_explanation_files": [
+            "pipeline_output\\xai\\local\\employee_11139_explanation.json",
+            "pipeline_output\\xai\\local\\employee_6378_explanation.json"
+        ],
+        "local_contribution_files": [
+            "pipeline_output\\xai\\local\\employee_11139_contributions.csv",
+            "pipeline_output\\xai\\local\\employee_6378_contributions.csv"
+        ]
+    }
+}

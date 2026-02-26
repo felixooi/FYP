@@ -1,0 +1,102 @@
+[
+  {
+    "feature": "Employee_Satisfaction_Score",
+    "mean_abs_shap": 9.169281005859375,
+    "rank": 1
+  },
+  {
+    "feature": "Workload_Intensity",
+    "mean_abs_shap": 6.237590789794922,
+    "rank": 2
+  },
+  {
+    "feature": "Work_Hours_Per_Week",
+    "mean_abs_shap": 4.223361492156982,
+    "rank": 3
+  },
+  {
+    "feature": "Training_Hours",
+    "mean_abs_shap": 2.17962646484375,
+    "rank": 4
+  },
+  {
+    "feature": "Performance_Score",
+    "mean_abs_shap": 2.0536155700683594,
+    "rank": 5
+  },
+  {
+    "feature": "Promotions",
+    "mean_abs_shap": 1.1927729845046997,
+    "rank": 6
+  },
+  {
+    "feature": "Project_Load",
+    "mean_abs_shap": 1.1830500364303589,
+    "rank": 7
+  },
+  {
+    "feature": "Tenure_Performance_Ratio",
+    "mean_abs_shap": 1.172613501548767,
+    "rank": 8
+  },
+  {
+    "feature": "Work_Life_Balance",
+    "mean_abs_shap": 0.9030573964118958,
+    "rank": 9
+  },
+  {
+    "feature": "Projects_Handled",
+    "mean_abs_shap": 0.42248180508613586,
+    "rank": 10
+  },
+  {
+    "feature": "Burnout_Risk",
+    "mean_abs_shap": 0.3604210615158081,
+    "rank": 11
+  },
+  {
+    "feature": "Overtime_Ratio",
+    "mean_abs_shap": 0.33471381664276123,
+    "rank": 12
+  },
+  {
+    "feature": "Sick_Days",
+    "mean_abs_shap": 0.24570898711681366,
+    "rank": 13
+  },
+  {
+    "feature": "Monthly_Salary",
+    "mean_abs_shap": 0.2210494428873062,
+    "rank": 14
+  },
+  {
+    "feature": "Is_Underutilized",
+    "mean_abs_shap": 0.1769717037677765,
+    "rank": 15
+  },
+  {
+    "feature": "Training_Per_Year",
+    "mean_abs_shap": 0.10265421867370605,
+    "rank": 16
+  },
+  {
+    "feature": "Salary_Performance_Gap",
+    "mean_abs_shap": 0.09301634132862091,
+    "rank": 17
+  },
+  {
+    "feature": "Age",
+    "mean_abs_shap": 0.04059267416596413,
+    "rank": 18
+  },
+  {
+    "feature": "Is_Overworked",
+    "mean_abs_shap": 0.026684362441301346,
+    "rank": 19
+  },
+  {
+    "feature": "Overtime_Hours",
+    "mean_abs_shap": 0.012598969042301178,
+    "rank": 20
+  }
+]
