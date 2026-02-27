@@ -1,0 +1,66 @@
+{
+  "employee_index": 61,
+  "prediction_probability": 0.997228617002719,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -3.3085386668099335,
+      "shap_value": 5.986850738525391
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 1.068754898524168,
+      "shap_value": 0.6995865702629089
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 1.1567301723136552,
+      "shap_value": 0.4593541622161865
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 1.3614533886136726,
+      "shap_value": 0.44815465807914734
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -0.46664383913304963,
+      "shap_value": 0.22306016087532043
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": 1.435031202391146,
+      "shap_value": -1.6819207668304443
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.7012272608860486,
+      "shap_value": -0.36919912695884705
+    },
+    {
+      "feature": "Salary_Performance_Gap",
+      "feature_value": -0.18580669993083265,
+      "shap_value": -0.06415069848299026
+    },
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": 0.43167978321408657,
+      "shap_value": -0.05546895042061806
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": 0.3247959746908704,
+      "shap_value": -0.02611362934112549
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 99.7%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-3.31), with SHAP impact 5.987 score units. Additionally, tenure performance (ratio) (1.07) and work hours per week (1.16) further elevate the risk with SHAP impacts 0.700 and 0.459 respectively.\n\nPositive factors such as promotions (1.44) and performance score (0.70) help reduce the overall risk (SHAP impacts -1.682 and -0.369 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_61_contributions.csv"
+}

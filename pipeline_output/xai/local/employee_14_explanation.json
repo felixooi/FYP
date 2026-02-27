@@ -1,0 +1,66 @@
+{
+  "employee_index": 14,
+  "prediction_probability": 0.995608748300112,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -1.9051383075676054,
+      "shap_value": 2.72316312789917
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 3.020602472555522,
+      "shap_value": 1.1697466373443604
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -1.1717070935584255,
+      "shap_value": 0.9272832870483398
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 1.6650654610895188,
+      "shap_value": 0.6975396871566772
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": 3.1558098087038795,
+      "shap_value": 0.5707647800445557
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.571091553299249,
+      "shap_value": -0.49142664670944214
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.39707926557302314,
+      "shap_value": -0.25542932748794556
+    },
+    {
+      "feature": "Salary_Performance_Gap",
+      "feature_value": -0.5042114557643038,
+      "shap_value": -0.12238869071006775
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -0.6023140438631406,
+      "shap_value": -0.08746331185102463
+    },
+    {
+      "feature": "Age",
+      "feature_value": 1.5221981296130895,
+      "shap_value": -0.015881018713116646
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 99.6%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.91), with SHAP impact 2.723 score units. Additionally, workload intensity (3.02) and training hours (-1.17) further elevate the risk with SHAP impacts 1.170 and 0.927 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.57) and performance score (0.40) help reduce the overall risk (SHAP impacts -0.491 and -0.255 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_14_contributions.csv"
+}

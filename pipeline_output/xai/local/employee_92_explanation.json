@@ -1,0 +1,61 @@
+{
+  "employee_index": 92,
+  "prediction_probability": 0.9852054342439684,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -1.0476178612459655,
+      "shap_value": 0.8033419251441956
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -1.6456406439194051,
+      "shap_value": 0.508671760559082
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -0.936834372450486,
+      "shap_value": 0.47131720185279846
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 0.7300483752785294,
+      "shap_value": 0.45358550548553467
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": 0.9324482286411325,
+      "shap_value": -0.11290785670280457
+    },
+    {
+      "feature": "Project_Load",
+      "feature_value": 0.18558794044984486,
+      "shap_value": -0.00794889871031046
+    },
+    {
+      "feature": "Overtime_Hours",
+      "feature_value": -0.011570882784744062,
+      "shap_value": -0.0027554864063858986
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": -0.029691770568819796,
+      "shap_value": -0.0023331621196120977
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 98.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, training hours (-1.05) and performance score (-1.65) further elevate the risk with SHAP impacts 0.803 and 0.509 respectively.\n\nPositive factors such as monthly salary (0.93) and project load (0.19) help reduce the overall risk (SHAP impacts -0.113 and -0.008 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_92_contributions.csv"
+}

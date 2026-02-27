@@ -1,0 +1,66 @@
+{
+  "employee_index": 83,
+  "prediction_probability": 0.7757338126100999,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -1.5814995182943195,
+      "shap_value": 1.9705226421356201
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": 1.6821072918297135,
+      "shap_value": 0.22788894176483154
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 0.3589646172471648,
+      "shap_value": 0.08555326610803604
+    },
+    {
+      "feature": "Burnout_Risk",
+      "feature_value": 1.4380694918886692,
+      "shap_value": 0.08312617987394333
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -1.163553729002896,
+      "shap_value": -0.921729326248169
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.5037700287188093,
+      "shap_value": -0.29533815383911133
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": -0.2972922553705892,
+      "shap_value": -0.2732619047164917
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": -0.6518353830190888,
+      "shap_value": -0.19990132749080658
+    },
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": 0.790563471516348,
+      "shap_value": -0.09663345664739609
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 77.6%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.58), with SHAP impact 1.971 score units. Additionally, promotions (-1.33) and sick days (1.68) further elevate the risk with SHAP impacts 1.110 and 0.228 respectively.\n\nPositive factors such as tenure performance (ratio) (-1.16) and performance score (0.50) help reduce the overall risk (SHAP impacts -0.922 and -0.295 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_83_contributions.csv"
+}

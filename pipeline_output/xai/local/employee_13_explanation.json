@@ -1,0 +1,66 @@
+{
+  "employee_index": 13,
+  "prediction_probability": 0.36512140439501023,
+  "predicted_resigned": 0,
+  "risk_level": "LOW",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": 0.9800125562907548,
+      "shap_value": 0.1303841471672058
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -0.3417754540365835,
+      "shap_value": 0.09834057092666626
+    },
+    {
+      "feature": "Project_Load",
+      "feature_value": 1.0666424162226016,
+      "shap_value": 0.058231376111507416
+    },
+    {
+      "feature": "Is_Underutilized",
+      "feature_value": -0.6931102064331334,
+      "shap_value": 0.04325868934392929
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.8519670958668378,
+      "shap_value": -0.6954253315925598
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": -0.3973333075511434,
+      "shap_value": -0.26881757378578186
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.26296943304352177,
+      "shap_value": -0.2052641212940216
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -0.6837179062923507,
+      "shap_value": -0.11731955409049988
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -0.6023140438631406,
+      "shap_value": -0.08746331185102463
+    }
+  ],
+  "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 36.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, projects handled (0.98) and training hours (-0.34) further elevate the risk with SHAP impacts 0.130 and 0.098 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.85) and work hours per week (-0.40) help reduce the overall risk (SHAP impacts -0.695 and -0.269 respectively).",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_13_contributions.csv"
+}

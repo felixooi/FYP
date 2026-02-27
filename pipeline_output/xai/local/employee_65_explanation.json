@@ -1,0 +1,66 @@
+{
+  "employee_index": 65,
+  "prediction_probability": 0.9702650961997514,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -1.8263279479413377,
+      "shap_value": 2.5398850440979004
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -1.4776132540056826,
+      "shap_value": 1.2328249216079712
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": 1.523961869394036,
+      "shap_value": 0.24047930538654327
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": 1.1110019579065,
+      "shap_value": 0.14905087649822235
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -1.1362611852723323,
+      "shap_value": -0.9019068479537964
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": -0.7607279969594896,
+      "shap_value": -0.43908971548080444
+    },
+    {
+      "feature": "Is_Underutilized",
+      "feature_value": 1.4427720017948884,
+      "shap_value": -0.12977606058120728
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -0.044795829684780485,
+      "shap_value": -0.09014125913381577
+    },
+    {
+      "feature": "Salary_Performance_Gap",
+      "feature_value": -0.1472005441052532,
+      "shap_value": -0.057089414447546005
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 97.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.83), with SHAP impact 2.540 score units. Additionally, training hours (-1.48) and promotions (-1.33) further elevate the risk with SHAP impacts 1.233 and 1.110 respectively.\n\nPositive factors such as tenure performance (ratio) (-1.14) and work hours per week (-0.76) help reduce the overall risk (SHAP impacts -0.902 and -0.439 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_65_contributions.csv"
+}

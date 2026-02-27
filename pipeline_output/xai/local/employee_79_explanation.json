@@ -1,0 +1,66 @@
+{
+  "employee_index": 79,
+  "prediction_probability": 0.5389881361702136,
+  "predicted_resigned": 0,
+  "risk_level": "LOW",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Training_Hours",
+      "feature_value": -1.480140483764186,
+      "shap_value": 1.235349178314209
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 1.4792540005864974,
+      "shap_value": 0.6104758977890015
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": -1.5588159209626664,
+      "shap_value": 0.11601986736059189
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 0.5012756284406977,
+      "shap_value": 0.07404879480600357
+    },
+    {
+      "feature": "Training_Per_Year",
+      "feature_value": -0.6972398883479152,
+      "shap_value": 0.07147076725959778
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": 0.5136583035950093,
+      "shap_value": -0.7513980269432068
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.2520916856367794,
+      "shap_value": -0.2597384750843048
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": 0.2657363881907771,
+      "shap_value": -0.20629914104938507
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": -0.6518353830190888,
+      "shap_value": -0.19990132749080658
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -0.6023140438631406,
+      "shap_value": -0.08746331185102463
+    }
+  ],
+  "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 53.9%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is training hours (-1.48), with SHAP impact 1.235 score units. Additionally, work hours per week (1.48) and work life balance (-1.56) further elevate the risk with SHAP impacts 0.610 and 0.116 respectively.\n\nPositive factors such as promotions (0.51) and tenure performance (ratio) (-0.25) help reduce the overall risk (SHAP impacts -0.751 and -0.260 respectively).",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_79_contributions.csv"
+}

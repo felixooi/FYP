@@ -1,0 +1,66 @@
+{
+  "employee_index": 74,
+  "prediction_probability": 0.8063037177897132,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 2.5610021115612884,
+      "shap_value": 1.1173396110534668
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 1.2672061260972824,
+      "shap_value": 0.40716493129730225
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": -4.425147975565336,
+      "shap_value": 0.3367590606212616
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -1.0698258678161028,
+      "shap_value": 0.2932821214199066
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -0.45645130915312226,
+      "shap_value": -0.6458409428596497
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.684565895517852,
+      "shap_value": -0.5738425850868225
+    },
+    {
+      "feature": "Projects_Handled",
+      "feature_value": -0.6518353830190888,
+      "shap_value": -0.19990132749080658
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -0.12082460333791156,
+      "shap_value": -0.12234700471162796
+    },
+    {
+      "feature": "Project_Load",
+      "feature_value": -0.8925170460293264,
+      "shap_value": -0.08893059194087982
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 80.6%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is work hours per week (2.56), with SHAP impact 1.117 score units. Additionally, promotions (-1.33) and workload intensity (1.27) further elevate the risk with SHAP impacts 1.110 and 0.407 respectively.\n\nPositive factors such as employee satisfaction score (-0.46) and tenure performance (ratio) (-0.68) help reduce the overall risk (SHAP impacts -0.646 and -0.574 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_74_contributions.csv"
+}

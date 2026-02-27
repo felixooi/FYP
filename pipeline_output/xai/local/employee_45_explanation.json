@@ -1,0 +1,61 @@
+{
+  "employee_index": 45,
+  "prediction_probability": 0.6404322932496366,
+  "predicted_resigned": 1,
+  "risk_level": "MEDIUM",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Performance_Score",
+      "feature_value": -1.200735526765395,
+      "shap_value": 0.3422502875328064
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": 1.6821072918297135,
+      "shap_value": 0.22788894176483154
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 0.8365383633621415,
+      "shap_value": 0.2198602259159088
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -0.4077145952011273,
+      "shap_value": 0.17912472784519196
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 0.524710826931128,
+      "shap_value": 0.1632152795791626
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -0.5295346763084283,
+      "shap_value": -0.475881427526474
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -0.20625996469624108,
+      "shap_value": -0.03701344504952431
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": 0.4161634563429914,
+      "shap_value": -0.03607533872127533
+    },
+    {
+      "feature": "Age",
+      "feature_value": 0.26255754545361076,
+      "shap_value": -0.0022488636896014214
+    }
+  ],
+  "explanation_text": "This employee is classified as MEDIUM RISK of attrition (probability: 64.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is performance score (-1.20), with SHAP impact 0.342 score units. Additionally, sick days (1.68) and workload intensity (0.84) further elevate the risk with SHAP impacts 0.228 and 0.220 respectively.\n\nPositive factors such as employee satisfaction score (-0.53) and training hours (-0.21) help reduce the overall risk (SHAP impacts -0.476 and -0.037 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_45_contributions.csv"
+}

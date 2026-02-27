@@ -1,0 +1,66 @@
+{
+  "employee_index": 3,
+  "prediction_probability": 0.9230732604646344,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -2.0515099382116264,
+      "shap_value": 3.063558578491211
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 0.9486378272772139,
+      "shap_value": 0.6123460531234741
+    },
+    {
+      "feature": "Burnout_Risk",
+      "feature_value": 1.9764861555184339,
+      "shap_value": 0.12383852154016495
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 0.3914321708732424,
+      "shap_value": 0.10076625645160675
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -0.49972225543993015,
+      "shap_value": 0.08002880960702896
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": 0.5136583035950093,
+      "shap_value": -0.7513980269432068
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": 0.31048842933173565,
+      "shap_value": -0.5531461238861084
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": 0.3244477282723755,
+      "shap_value": -0.02901221439242363
+    },
+    {
+      "feature": "Age",
+      "feature_value": 1.1623008198532385,
+      "shap_value": -0.011986116878688335
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": 0.04243275715157157,
+      "shap_value": -0.007171566132456064
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 92.3%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-2.05), with SHAP impact 3.064 score units. Additionally, tenure performance (ratio) (0.95) and burnout risk (1.98) further elevate the risk with SHAP impacts 0.612 and 0.124 respectively.\n\nPositive factors such as promotions (0.51) and training hours (0.31) help reduce the overall risk (SHAP impacts -0.751 and -0.553 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_3_contributions.csv"
+}

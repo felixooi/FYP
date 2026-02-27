@@ -1,102 +1,102 @@
 [
   {
     "feature": "Employee_Satisfaction_Score",
-    "mean_abs_shap": 9.169281005859375,
+    "mean_abs_shap": 2.378634214401245,
     "rank": 1
   },
   {
-    "feature": "Workload_Intensity",
-    "mean_abs_shap": 6.237590789794922,
+    "feature": "Promotions",
+    "mean_abs_shap": 0.8825544714927673,
     "rank": 2
   },
   {
-    "feature": "Work_Hours_Per_Week",
-    "mean_abs_shap": 4.223361492156982,
+    "feature": "Training_Hours",
+    "mean_abs_shap": 0.7933909893035889,
     "rank": 3
   },
   {
-    "feature": "Training_Hours",
-    "mean_abs_shap": 2.17962646484375,
+    "feature": "Tenure_Performance_Ratio",
+    "mean_abs_shap": 0.5943283438682556,
     "rank": 4
   },
   {
-    "feature": "Performance_Score",
-    "mean_abs_shap": 2.0536155700683594,
+    "feature": "Work_Hours_Per_Week",
+    "mean_abs_shap": 0.3771854043006897,
     "rank": 5
   },
   {
-    "feature": "Promotions",
-    "mean_abs_shap": 1.1927729845046997,
+    "feature": "Workload_Intensity",
+    "mean_abs_shap": 0.3568567633628845,
     "rank": 6
   },
   {
-    "feature": "Project_Load",
-    "mean_abs_shap": 1.1830500364303589,
+    "feature": "Performance_Score",
+    "mean_abs_shap": 0.28096669912338257,
     "rank": 7
   },
   {
-    "feature": "Tenure_Performance_Ratio",
-    "mean_abs_shap": 1.172613501548767,
+    "feature": "Projects_Handled",
+    "mean_abs_shap": 0.15911580622196198,
     "rank": 8
   },
   {
-    "feature": "Work_Life_Balance",
-    "mean_abs_shap": 0.9030573964118958,
+    "feature": "Salary_Performance_Gap",
+    "mean_abs_shap": 0.11488746851682663,
     "rank": 9
   },
   {
-    "feature": "Projects_Handled",
-    "mean_abs_shap": 0.42248180508613586,
+    "feature": "Sick_Days",
+    "mean_abs_shap": 0.10901894420385361,
     "rank": 10
   },
   {
     "feature": "Burnout_Risk",
-    "mean_abs_shap": 0.3604210615158081,
+    "mean_abs_shap": 0.07219573110342026,
     "rank": 11
   },
   {
-    "feature": "Overtime_Ratio",
-    "mean_abs_shap": 0.33471381664276123,
+    "feature": "Is_Underutilized",
+    "mean_abs_shap": 0.07180941849946976,
     "rank": 12
   },
   {
-    "feature": "Sick_Days",
-    "mean_abs_shap": 0.24570898711681366,
+    "feature": "Training_Per_Year",
+    "mean_abs_shap": 0.0688302218914032,
     "rank": 13
   },
   {
-    "feature": "Monthly_Salary",
-    "mean_abs_shap": 0.2210494428873062,
+    "feature": "Project_Load",
+    "mean_abs_shap": 0.0594278909265995,
     "rank": 14
   },
   {
-    "feature": "Is_Underutilized",
-    "mean_abs_shap": 0.1769717037677765,
+    "feature": "Monthly_Salary",
+    "mean_abs_shap": 0.056435760110616684,
     "rank": 15
   },
   {
-    "feature": "Training_Per_Year",
-    "mean_abs_shap": 0.10265421867370605,
+    "feature": "Work_Life_Balance",
+    "mean_abs_shap": 0.0497262142598629,
     "rank": 16
   },
   {
-    "feature": "Salary_Performance_Gap",
-    "mean_abs_shap": 0.09301634132862091,
+    "feature": "Overtime_Ratio",
+    "mean_abs_shap": 0.010889312252402306,
     "rank": 17
   },
   {
-    "feature": "Age",
-    "mean_abs_shap": 0.04059267416596413,
+    "feature": "Overtime_Hours",
+    "mean_abs_shap": 0.010337535291910172,
     "rank": 18
   },
   {
-    "feature": "Is_Overworked",
-    "mean_abs_shap": 0.026684362441301346,
+    "feature": "Age",
+    "mean_abs_shap": 0.009518396109342575,
     "rank": 19
   },
   {
-    "feature": "Overtime_Hours",
-    "mean_abs_shap": 0.012598969042301178,
+    "feature": "Is_Overworked",
+    "mean_abs_shap": 0.004420125391334295,
     "rank": 20
   }
 ]

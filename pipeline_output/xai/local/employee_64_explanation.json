@@ -1,0 +1,66 @@
+{
+  "employee_index": 64,
+  "prediction_probability": 0.32992395711627326,
+  "predicted_resigned": 0,
+  "risk_level": "LOW",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -1.074520786555761,
+      "shap_value": 0.7915148138999939
+    },
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": -0.37207446316589793,
+      "shap_value": 0.03672289475798607
+    },
+    {
+      "feature": "Age",
+      "feature_value": -1.446954675905682,
+      "shap_value": 0.01625191792845726
+    },
+    {
+      "feature": "Is_Overworked",
+      "feature_value": -0.16643461373046595,
+      "shap_value": 0.002615459030494094
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.8072511991235036,
+      "shap_value": -0.6629483699798584
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": -0.46508134190811334,
+      "shap_value": -0.3462361991405487
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": -0.46259119850710423,
+      "shap_value": -0.29939478635787964
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": 0.05232028190318276,
+      "shap_value": -0.29528558254241943
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -1.1734193777863542,
+      "shap_value": -0.16630136966705322
+    }
+  ],
+  "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 33.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, employee satisfaction score (-1.07) and monthly salary (-0.37) further elevate the risk with SHAP impacts 0.792 and 0.037 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.81) and workload intensity (-0.47) help reduce the overall risk (SHAP impacts -0.663 and -0.346 respectively).",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_64_contributions.csv"
+}

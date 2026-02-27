@@ -1,0 +1,61 @@
+{
+  "employee_index": 24,
+  "prediction_probability": 0.9978976505448316,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -1.9199578062072877,
+      "shap_value": 2.75762677192688
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -1.5138767638782609,
+      "shap_value": 1.2690452337265015
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": -1.329087493997264,
+      "shap_value": 1.109647512435913
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -1.6509669835196976,
+      "shap_value": 0.510664165019989
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "feature_value": 1.1690095496085924,
+      "shap_value": 0.465107798576355
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": -0.5783048282565336,
+      "shap_value": -0.4966656267642975
+    },
+    {
+      "feature": "Age",
+      "feature_value": 1.4322238021731268,
+      "shap_value": -0.014907293021678925
+    },
+    {
+      "feature": "Overtime_Hours",
+      "feature_value": -0.01288126271045847,
+      "shap_value": -0.002680751495063305
+    },
+    {
+      "feature": "Overtime_Ratio",
+      "feature_value": -0.03373152320251629,
+      "shap_value": -0.00206215912476182
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 99.8%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.92), with SHAP impact 2.758 score units. Additionally, training hours (-1.51) and promotions (-1.33) further elevate the risk with SHAP impacts 1.269 and 1.110 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.58) and age (1.43) help reduce the overall risk (SHAP impacts -0.497 and -0.015 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_24_contributions.csv"
+}

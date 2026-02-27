@@ -1,0 +1,66 @@
+{
+  "employee_index": 44,
+  "prediction_probability": 0.9997778791946733,
+  "predicted_resigned": 1,
+  "risk_level": "HIGH",
+  "actual_resigned": null,
+  "threshold": 0.55,
+  "base_value": -0.4001726008061852,
+  "explanation_space": "model_score",
+  "top_risk_increasing_factors": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "feature_value": -3.046124673789378,
+      "shap_value": 5.376591682434082
+    },
+    {
+      "feature": "Training_Hours",
+      "feature_value": -2.245634299861747,
+      "shap_value": 1.9999308586120605
+    },
+    {
+      "feature": "Salary_Performance_Gap",
+      "feature_value": 8.924075034252768,
+      "shap_value": 1.6020972728729248
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "feature_value": 1.5773349710940134,
+      "shap_value": 1.068966031074524
+    },
+    {
+      "feature": "Performance_Score",
+      "feature_value": -2.2157325672191353,
+      "shap_value": 0.7219207286834717
+    }
+  ],
+  "top_risk_reducing_factors": [
+    {
+      "feature": "Monthly_Salary",
+      "feature_value": 10.286118646548395,
+      "shap_value": -1.1857881546020508
+    },
+    {
+      "feature": "Promotions",
+      "feature_value": 0.5136583035950093,
+      "shap_value": -0.7513980269432068
+    },
+    {
+      "feature": "Sick_Days",
+      "feature_value": -1.1734193777863542,
+      "shap_value": -0.16630136966705322
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "feature_value": 0.39751348739419345,
+      "shap_value": -0.034639082849025726
+    },
+    {
+      "feature": "Workload_Intensity",
+      "feature_value": 0.29932079048426014,
+      "shap_value": -0.013784785754978657
+    }
+  ],
+  "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 100.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-3.05), with SHAP impact 5.377 score units. Additionally, training hours (-2.25) and salary performance (gap) (8.92) further elevate the risk with SHAP impacts 2.000 and 1.602 respectively.\n\nPositive factors such as monthly salary (10.29) and promotions (0.51) help reduce the overall risk (SHAP impacts -1.186 and -0.751 respectively). These factors are not enough to move the employee below the current risk threshold.",
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_44_contributions.csv"
+}
