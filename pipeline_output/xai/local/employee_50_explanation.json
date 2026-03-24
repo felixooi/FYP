@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 86.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.09), with SHAP impact 0.835 score units. Additionally, tenure performance (ratio) (0.93) and work hours per week (1.15) further elevate the risk with SHAP impacts 0.598 and 0.455 respectively.\n\nPositive factors such as training hours (0.21) and performance score (0.31) help reduce the overall risk (SHAP impacts -0.457 and -0.224 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_50_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_50_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.835,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "action": "Recognise long-tenure, high-performing employees with formal career milestone rewards and an accelerated progression plan. Stagnation for high performers is a primary flight risk signal.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.5984,
+      "evidence": "High tenure with flat progression and strong performance indicates an employee who may feel career-stuck, dramatically increasing departure probability (Allen et al., 2010)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.4548,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Sick_Days",
+      "action": "Elevated sick-day usage is a leading indicator of burnout or disengagement. Initiate a confidential wellbeing conversation. Explore whether workload, workplace conflict, or personal circumstances are contributing.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.3856,
+      "evidence": "Absenteeism patterns are a validated proxy for engagement levels and predict voluntary turnover with 6-month lead time (Farrell & Stamm, 1988)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.3038,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    }
+  ]
 }

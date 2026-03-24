@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 39.8%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is training hours (-1.13), with SHAP impact 0.888 score units. Additionally, employee satisfaction score (-1.03) and projects handled (0.98) further elevate the risk with SHAP impacts 0.695 and 0.130 respectively.\n\nPositive factors such as promotions (0.51) and performance score (0.87) help reduce the overall risk (SHAP impacts -0.751 and -0.432 respectively).",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_59_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_59_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.8875,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.6952,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Projects_Handled",
+      "action": "Reduce concurrent project assignments. Apply a WIP (Work-In-Progress) limit of no more than 3 simultaneous major projects per individual contributor.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.1304,
+      "evidence": "Context-switching across multiple concurrent projects reduces productivity by up to 40% and increases dissatisfaction (Meyer, 2019)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "optional",
+      "shap_magnitude": 0.0628,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    },
+    {
+      "feature": "Training_Per_Year",
+      "action": "Increase the annualised training rate. Review if learning opportunities are being offered equitably and whether the employee has had access to relevant upskilling pathways.",
+      "category": "career_growth",
+      "priority": "optional",
+      "shap_magnitude": 0.0602,
+      "evidence": "Low training-per-year ratios signal neglect of career development, a key engagement driver (Saks, 2006)."
+    }
+  ]
 }

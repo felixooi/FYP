@@ -57,5 +57,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 98.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, training hours (-1.05) and performance score (-1.65) further elevate the risk with SHAP impacts 0.803 and 0.509 respectively.\n\nPositive factors such as monthly salary (0.93) and project load (0.19) help reduce the overall risk (SHAP impacts -0.113 and -0.008 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_92_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_92_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.8033,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Performance_Score",
+      "action": "For low performance, investigate root causes (workload? skill gap? manager conflict?) before applying a PIP. For high performers with low satisfaction, focus on recognition and career conversations rather than performance management.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.5087,
+      "evidence": "Performance issues that are environmental (not individual) respond to structural changes rather than performance management escalation (Aguinis, 2019)."
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.4713,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "action": "Recognise long-tenure, high-performing employees with formal career milestone rewards and an accelerated progression plan. Stagnation for high performers is a primary flight risk signal.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.4536,
+      "evidence": "High tenure with flat progression and strong performance indicates an employee who may feel career-stuck, dramatically increasing departure probability (Allen et al., 2010)."
+    }
+  ]
 }

@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 99.2%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.67), with SHAP impact 2.186 score units. Additionally, promotions (-1.33) and work hours per week (2.38) further elevate the risk with SHAP impacts 1.110 and 1.031 respectively.\n\nPositive factors such as performance score (0.70) and projects handled (-0.65) help reduce the overall risk (SHAP impacts -0.370 and -0.200 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_60_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_60_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 2.1864,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 1.0311,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.4656,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.3471,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    }
+  ]
 }

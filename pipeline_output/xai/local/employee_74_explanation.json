@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 80.6%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is work hours per week (2.56), with SHAP impact 1.117 score units. Additionally, promotions (-1.33) and workload intensity (1.27) further elevate the risk with SHAP impacts 1.110 and 0.407 respectively.\n\nPositive factors such as employee satisfaction score (-0.46) and tenure performance (ratio) (-0.68) help reduce the overall risk (SHAP impacts -0.646 and -0.574 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_74_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_74_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 1.1173,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.4072,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    },
+    {
+      "feature": "Work_Life_Balance",
+      "action": "Implement hybrid or remote work options. Enforce 'right to disconnect' policies outside contracted hours. Offer additional leave days or mental health days.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.3368,
+      "evidence": "Poor work-life balance is consistently ranked as one of the top three reasons for voluntary resignation in HR surveys (SHRM, 2023; Gallup, 2022)."
+    },
+    {
+      "feature": "Performance_Score",
+      "action": "For low performance, investigate root causes (workload? skill gap? manager conflict?) before applying a PIP. For high performers with low satisfaction, focus on recognition and career conversations rather than performance management.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.2933,
+      "evidence": "Performance issues that are environmental (not individual) respond to structural changes rather than performance management escalation (Aguinis, 2019)."
+    }
+  ]
 }

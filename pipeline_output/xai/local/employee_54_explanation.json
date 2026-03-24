@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 92.7%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is tenure performance (ratio) (2.03), with SHAP impact 1.397 score units. Additionally, training hours (-1.47) and work hours per week (1.75) further elevate the risk with SHAP impacts 1.228 and 0.736 respectively.\n\nPositive factors such as employee satisfaction score (-0.14) and promotions (0.51) help reduce the overall risk (SHAP impacts -1.385 and -0.751 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_54_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_54_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "action": "Recognise long-tenure, high-performing employees with formal career milestone rewards and an accelerated progression plan. Stagnation for high performers is a primary flight risk signal.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.3973,
+      "evidence": "High tenure with flat progression and strong performance indicates an employee who may feel career-stuck, dramatically increasing departure probability (Allen et al., 2010)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.2284,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.7362,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "critical",
+      "shap_magnitude": 0.7217,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    },
+    {
+      "feature": "Performance_Score",
+      "action": "For low performance, investigate root causes (workload? skill gap? manager conflict?) before applying a PIP. For high performers with low satisfaction, focus on recognition and career conversations rather than performance management.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.5041,
+      "evidence": "Performance issues that are environmental (not individual) respond to structural changes rather than performance management escalation (Aguinis, 2019)."
+    }
+  ]
 }

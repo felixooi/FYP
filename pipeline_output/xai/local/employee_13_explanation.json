@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 36.5%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, projects handled (0.98) and training hours (-0.34) further elevate the risk with SHAP impacts 0.130 and 0.098 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.85) and work hours per week (-0.40) help reduce the overall risk (SHAP impacts -0.695 and -0.269 respectively).",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_13_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_13_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Projects_Handled",
+      "action": "Reduce concurrent project assignments. Apply a WIP (Work-In-Progress) limit of no more than 3 simultaneous major projects per individual contributor.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.1304,
+      "evidence": "Context-switching across multiple concurrent projects reduces productivity by up to 40% and increases dissatisfaction (Meyer, 2019)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "optional",
+      "shap_magnitude": 0.0983,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Project_Load",
+      "action": "Schedule a structured stay interview with the employee's manager to understand specific concerns and co-create a personalised retention plan.",
+      "category": "engagement",
+      "priority": "optional",
+      "shap_magnitude": 0.0582,
+      "evidence": "Stay interviews are among the most cost-effective retention tools, with a median implementation cost near zero (Finnegan, 2012)."
+    },
+    {
+      "feature": "Is_Underutilized",
+      "action": "Schedule a structured stay interview with the employee's manager to understand specific concerns and co-create a personalised retention plan.",
+      "category": "engagement",
+      "priority": "optional",
+      "shap_magnitude": 0.0433,
+      "evidence": "Stay interviews are among the most cost-effective retention tools, with a median implementation cost near zero (Finnegan, 2012)."
+    }
+  ]
 }

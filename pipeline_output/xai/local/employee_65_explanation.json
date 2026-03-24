@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 97.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.83), with SHAP impact 2.540 score units. Additionally, training hours (-1.48) and promotions (-1.33) further elevate the risk with SHAP impacts 1.233 and 1.110 respectively.\n\nPositive factors such as tenure performance (ratio) (-1.14) and work hours per week (-0.76) help reduce the overall risk (SHAP impacts -0.902 and -0.439 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_65_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_65_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 2.5399,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.2328,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Projects_Handled",
+      "action": "Reduce concurrent project assignments. Apply a WIP (Work-In-Progress) limit of no more than 3 simultaneous major projects per individual contributor.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.2405,
+      "evidence": "Context-switching across multiple concurrent projects reduces productivity by up to 40% and increases dissatisfaction (Meyer, 2019)."
+    },
+    {
+      "feature": "Sick_Days",
+      "action": "Elevated sick-day usage is a leading indicator of burnout or disengagement. Initiate a confidential wellbeing conversation. Explore whether workload, workplace conflict, or personal circumstances are contributing.",
+      "category": "engagement",
+      "priority": "recommended",
+      "shap_magnitude": 0.1491,
+      "evidence": "Absenteeism patterns are a validated proxy for engagement levels and predict voluntary turnover with 6-month lead time (Farrell & Stamm, 1988)."
+    }
+  ]
 }

@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as LOW RISK of attrition (probability: 33.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is promotions (-1.33), with SHAP impact 1.110 score units. Additionally, employee satisfaction score (-1.07) and monthly salary (-0.37) further elevate the risk with SHAP impacts 0.792 and 0.037 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.81) and workload intensity (-0.47) help reduce the overall risk (SHAP impacts -0.663 and -0.346 respectively).",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_64_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_64_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.7915,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Monthly_Salary",
+      "action": "Benchmark this employee's salary against current market rates (e.g., via Mercer or PayScale data). If below the 50th percentile for their role and seniority, initiate an off-cycle compensation review and adjustment.",
+      "category": "compensation",
+      "priority": "optional",
+      "shap_magnitude": 0.0367,
+      "evidence": "Competitive compensation is the most cited factor in voluntary attrition, particularly in the first 3 years of tenure (SHRM Retention Survey, 2023)."
+    },
+    {
+      "feature": "Age",
+      "action": "Tailor retention strategies to career life stage. Early-career employees prioritise growth and flexibility; mid-career employees prioritise compensation and progression; senior employees prioritise autonomy and legacy/purpose.",
+      "category": "engagement",
+      "priority": "optional",
+      "shap_magnitude": 0.0163,
+      "evidence": "Generational and life-stage differences in work motivation require differentiated retention approaches (Twenge, 2010; Lyons & Kuron, 2014)."
+    },
+    {
+      "feature": "Is_Overworked",
+      "action": "Immediately reduce assigned work hours to within the 40-hour standard work week. Schedule a structured workload review with the line manager within two weeks.",
+      "category": "workload",
+      "priority": "optional",
+      "shap_magnitude": 0.0026,
+      "evidence": "Employees consistently working over 45 hours per week show a 33% higher risk of attrition compared to those within normal hours (Pencavel, 2015)."
+    }
+  ]
 }

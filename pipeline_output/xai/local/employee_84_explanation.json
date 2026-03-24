@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 80.2%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.36), with SHAP impact 1.456 score units. Additionally, training hours (-1.42) and promotions (-1.33) further elevate the risk with SHAP impacts 1.170 and 1.110 respectively.\n\nPositive factors such as tenure performance (ratio) (-0.80) and workload intensity (-1.06) help reduce the overall risk (SHAP impacts -0.658 and -0.605 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_84_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_84_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 1.4564,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Training_Hours",
+      "action": "Increase annual training allocation by a minimum of 20 hours. Enrol the employee in a structured learning pathway aligned to their career goals (e.g., technical certifications, leadership development programmes).",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1704,
+      "evidence": "Organisations investing in employee L&D report 24% higher retention rates (LinkedIn Learning, 2023; Noe, 2020)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Salary_Performance_Gap",
+      "action": "Align pay with performance outcomes by introducing or recalibrating a performance-linked bonus structure. High performers below market pay are at the greatest flight risk.",
+      "category": "compensation",
+      "priority": "optional",
+      "shap_magnitude": 0.048,
+      "evidence": "A misalignment between perceived contribution and compensation is a primary driver of resentment and exit intention (Adams' Equity Theory, 1963; Milkovich et al., 2014)."
+    },
+    {
+      "feature": "Training_Per_Year",
+      "action": "Increase the annualised training rate. Review if learning opportunities are being offered equitably and whether the employee has had access to relevant upskilling pathways.",
+      "category": "career_growth",
+      "priority": "optional",
+      "shap_magnitude": 0.0476,
+      "evidence": "Low training-per-year ratios signal neglect of career development, a key engagement driver (Saks, 2006)."
+    }
+  ]
 }

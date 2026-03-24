@@ -33,6 +33,7 @@ from modules.explanation_analysis import (
     create_contribution_table,
 )
 from modules.explanation_generator import generate_explanation
+from modules.recommendation_engine import generate_recommendations
 
 
 def _load_artifacts(
@@ -200,7 +201,7 @@ def _generate_xai_outputs(
     selected_features: list,
     output_dir: str,
     raw_df: pd.DataFrame,
-    local_count: int = 5,
+    local_count=None,  # None = process ALL employees; int = process top-N by risk
     global_max_samples: int = 5000,
     local_indices=None,
 ) -> dict:
@@ -236,7 +237,11 @@ def _generate_xai_outputs(
     # Local explanations for requested or top-risk employees
     if local_indices is None:
         sorted_idx = np.argsort(y_prob)[::-1]
-        local_indices = sorted_idx[: min(local_count, len(sorted_idx))].tolist()
+        # None means process ALL employees; int limits to top-N by risk score
+        if local_count is None:
+            local_indices = sorted_idx.tolist()
+        else:
+            local_indices = sorted_idx[:min(local_count, len(sorted_idx))].tolist()
     else:
         local_indices = [int(i) for i in local_indices if 0 <= int(i) < len(X)]
 
@@ -278,6 +283,18 @@ def _generate_xai_outputs(
         if "Resigned" in raw_df.columns:
             actual_resigned = int(raw_df.iloc[idx]["Resigned"])
 
+        # ── Phase D: Rule-based mitigation recommendations ───────────────────
+        # Remap top_positive records to the format expected by recommendation_engine
+        # extract_local_explanation uses key 'shap_value'; engine expects key 'impact'.
+        top_factors_for_engine = [
+            {"feature": f.get("feature", ""), "impact": f.get("shap_value", 0.0)}
+            for f in local_exp["top_positive"]
+        ]
+        rule_recommendations = generate_recommendations(
+            top_risk_factors=top_factors_for_engine,
+            max_recommendations=5,
+        )
+
         explanation_obj = {
             "employee_index": int(idx),
             "prediction_probability": float(y_prob[idx]),
@@ -291,6 +308,7 @@ def _generate_xai_outputs(
             "top_risk_reducing_factors": local_exp["top_negative"],
             "explanation_text": nl_explanation,
             "contributions_csv": contrib_path,
+            "rule_recommendations": rule_recommendations,
         }
         exp_path = os.path.join(local_dir, f"employee_{idx}_explanation.json")
         with open(exp_path, "w") as f:

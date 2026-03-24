@@ -57,5 +57,47 @@
     }
   ],
   "explanation_text": "This employee is classified as MEDIUM RISK of attrition (probability: 64.0%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is performance score (-1.20), with SHAP impact 0.342 score units. Additionally, sick days (1.68) and workload intensity (0.84) further elevate the risk with SHAP impacts 0.228 and 0.220 respectively.\n\nPositive factors such as employee satisfaction score (-0.53) and training hours (-0.21) help reduce the overall risk (SHAP impacts -0.476 and -0.037 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_45_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_45_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Performance_Score",
+      "action": "For low performance, investigate root causes (workload? skill gap? manager conflict?) before applying a PIP. For high performers with low satisfaction, focus on recognition and career conversations rather than performance management.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 0.3423,
+      "evidence": "Performance issues that are environmental (not individual) respond to structural changes rather than performance management escalation (Aguinis, 2019)."
+    },
+    {
+      "feature": "Sick_Days",
+      "action": "Elevated sick-day usage is a leading indicator of burnout or disengagement. Initiate a confidential wellbeing conversation. Explore whether workload, workplace conflict, or personal circumstances are contributing.",
+      "category": "engagement",
+      "priority": "recommended",
+      "shap_magnitude": 0.2279,
+      "evidence": "Absenteeism patterns are a validated proxy for engagement levels and predict voluntary turnover with 6-month lead time (Farrell & Stamm, 1988)."
+    },
+    {
+      "feature": "Workload_Intensity",
+      "action": "Conduct a workload audit across the team. Redistribute projects, defer non-urgent tasks, and set explicit boundaries on concurrent project assignments.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.2199,
+      "evidence": "Composite workload intensity is a robust predictor of intention-to-leave (Spector & Jex, 1998; Maslach et al., 2001)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "recommended",
+      "shap_magnitude": 0.1791,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.1632,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    }
+  ]
 }

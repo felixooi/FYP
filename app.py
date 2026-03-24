@@ -7,9 +7,16 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+# Load environment variables from .env (GEMINI_API_KEY etc.)
+load_dotenv()
 
 # Import from the existing pipeline
 from end_to_end_pipeline import run_inference_pipeline
+
+# Import the rule-based recommendation engine (Phase D Layer 1)
+from modules.recommendation_engine import generate_recommendations, summarise_for_prompt
 
 app = FastAPI(title="RetentionAI Pipeline API")
 
@@ -63,7 +70,7 @@ async def analyze_dataset(file: UploadFile = File(...)):
             scaler_path="data/scaler.pkl",
             fe_params_path="models/feature_engineering_params.json",
             run_xai=True,
-            xai_local_count=20  # increased to pull explanations for the dashboard
+            xai_local_count=None  # None = process ALL employees dynamically
         )
         
         # Load the predictions CSV so we can return the entire dataset
@@ -77,10 +84,21 @@ async def analyze_dataset(file: UploadFile = File(...)):
         # This mapping assumes standard HR fields exist in the uploaded dataset.
         
         employees = []
+        # Pre-compute per-department average salary for salary ratio calculation
+        dept_avg_salary = df_preds.groupby("Department")["Monthly_Salary"].transform("mean") \
+            if "Department" in df_preds.columns and "Monthly_Salary" in df_preds.columns \
+            else None
+
         for index, row in df_preds.iterrows():
             # Extract probability or default
             prob = row.get("Attrition_Probability", 0)
-            
+
+            # Compute salary ratio vs department average (real data, not hardcoded)
+            if dept_avg_salary is not None and dept_avg_salary.iloc[index] > 0:
+                salary_ratio = round(float(row.get("Monthly_Salary", 0)) / float(dept_avg_salary.iloc[index]), 2)
+            else:
+                salary_ratio = 1.0  # Neutral fallback only if data missing
+
             # Map common columns or use fallbacks according to live_feed_inference_data.csv
             emp = {
                 "id": index + 1,
@@ -90,12 +108,12 @@ async def analyze_dataset(file: UploadFile = File(...)):
                 "location": row.get("Remote_Work_Frequency", "Unknown"),
                 "riskScore": int(prob * 100),
                 "satisfaction": int(row.get("Employee_Satisfaction_Score", 5)),
-                "overtime": float(row.get("Overtime_Hours", 5)),  
+                "overtime": float(row.get("Overtime_Hours", 5)),
                 "tenure": int(row.get("Years_At_Company", 0)),
                 "lastPromo": int(row.get("Promotions", 0)),
-                "salaryRatio": 1.0, # Salary Ratio doesn't have an exact match in the new CSV
+                "salaryRatio": salary_ratio,
                 "salary": float(row.get("Monthly_Salary", 50000)),
-                "manager": "Unknown Manager",
+                "manager": row.get("Manager_Name", row.get("Manager", "N/A")),
                 "performance": str(row.get("Performance_Score", 3))
             }
             # Attempt an exact Risk Level map if present
@@ -186,6 +204,222 @@ async def analyze_dataset(file: UploadFile = File(...)):
         import traceback
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
+
+
+from pydantic import BaseModel
+
+class SimulationParams(BaseModel):
+    salary_increase_pct: float = 0.0       # e.g., 10.0 = +10% of Monthly_Salary
+    overtime_reduction_hrs: float = 0.0    # e.g., 5.0 = reduce Overtime_Hours by 5
+    mentorship_enabled: bool = False        # e.g., True = +1 satisfaction for eligible employees
+    training_hours_increase: float = 0.0   # e.g., 8.0 = add 8hrs of training per quarter
+
+
+@app.post("/api/simulate")
+async def simulate_intervention(params: SimulationParams):
+    """
+    What-If Simulation Engine.
+    Applies proposed HR interventions to the uploaded dataset and re-runs 
+    predictions through the trained ML model to calculate true risk deltas.
+    """
+    uploaded_path = os.path.join(DATA_DIR, "uploaded_dataset.csv")
+    if not os.path.exists(uploaded_path):
+        return JSONResponse(status_code=400, content={
+            "status": "error",
+            "message": "No dataset uploaded yet. Please upload and analyze a CSV first via /api/analyze."
+        })
+
+    try:
+        # Load artifacts (re-uses same paths as analyze)
+        from end_to_end_pipeline import (
+            _load_artifacts, _preprocess_for_inference, _predict_with_model
+        )
+        model, threshold, selected_features, scaler, fe_params = _load_artifacts(
+            model_path="models/best_model_tuned.pkl",
+            metadata_path="models/tuning_metadata.json",
+            selected_features_path="data/selected_features.json",
+            scaler_path="data/scaler.pkl",
+            fe_params_path="models/feature_engineering_params.json",
+        )
+
+        # Load the original uploaded data
+        df_original = pd.read_csv(uploaded_path)
+
+        # --- Run original prediction for baseline ---
+        X_orig, _ = _preprocess_for_inference(df_original, selected_features, scaler, fe_params)
+        y_prob_orig = _predict_with_model(model, X_orig)
+
+        # --- Apply simulated interventions to a copy ---
+        df_sim = df_original.copy()
+        if params.salary_increase_pct > 0 and "Monthly_Salary" in df_sim.columns:
+            df_sim["Monthly_Salary"] = df_sim["Monthly_Salary"] * (1 + params.salary_increase_pct / 100.0)
+        if params.overtime_reduction_hrs > 0 and "Overtime_Hours" in df_sim.columns:
+            df_sim["Overtime_Hours"] = (df_sim["Overtime_Hours"] - params.overtime_reduction_hrs).clip(lower=0)
+        if params.mentorship_enabled and "Employee_Satisfaction_Score" in df_sim.columns:
+            # Mentorship modelled as a satisfaction increase capped at max scale (10)
+            df_sim["Employee_Satisfaction_Score"] = (df_sim["Employee_Satisfaction_Score"] + 0.8).clip(upper=10)
+        if params.training_hours_increase > 0 and "Training_Hours" in df_sim.columns:
+            df_sim["Training_Hours"] = df_sim["Training_Hours"] + params.training_hours_increase
+
+        # --- Run simulated prediction ---
+        X_sim, _ = _preprocess_for_inference(df_sim, selected_features, scaler, fe_params)
+        y_prob_sim = _predict_with_model(model, X_sim)
+
+        # --- Build diff output ---
+        results = []
+        for i in range(len(df_original)):
+            orig_risk = int(y_prob_orig[i] * 100)
+            sim_risk = int(y_prob_sim[i] * 100)
+            results.append({
+                "employee_index": i,
+                "employee_name": str(df_original.iloc[i].get("Employee_Name", f"Employee {i+1}")),
+                "department": str(df_original.iloc[i].get("Department", "Unknown")),
+                "original_risk": orig_risk,
+                "simulated_risk": sim_risk,
+                "delta": sim_risk - orig_risk,  # Negative = improvement
+            })
+
+        # Aggregate stats
+        avg_original = round(sum(r["original_risk"] for r in results) / len(results), 1)
+        avg_simulated = round(sum(r["simulated_risk"] for r in results) / len(results), 1)
+        high_risk_original = sum(1 for r in results if r["original_risk"] > 70)
+        high_risk_simulated = sum(1 for r in results if r["simulated_risk"] > 70)
+
+        return JSONResponse(content={
+            "status": "success",
+            "simulation_params": params.model_dump(),
+            "aggregate": {
+                "avg_risk_before": avg_original,
+                "avg_risk_after": avg_simulated,
+                "avg_delta": round(avg_simulated - avg_original, 1),
+                "high_risk_count_before": high_risk_original,
+                "high_risk_count_after": high_risk_simulated,
+                "high_risk_reduction": high_risk_original - high_risk_simulated,
+            },
+            "employee_results": results
+        })
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
+
+class RecommendRequest(BaseModel):
+    employee_id: int                  # 0-based index from the employees list
+    employee_name: str = ""
+    role: str = ""
+    dept: str = ""
+    risk_score: int = 0
+    risk_level_text: str = ""
+    satisfaction: float = 5.0
+    tenure: int = 0
+    overtime: float = 0.0
+    performance: str = "3"
+
+
+@app.post("/api/recommend")
+async def generate_retention_recommendation(req: RecommendRequest):
+    """
+    Phase D — Attrition Mitigation Recommendation Engine.
+
+    Layer 1: Maps SHAP top risk-increasing factors to evidence-based HR interventions.
+    Layer 2: Calls Gemini 2.5 Flash to generate a personalised retention narrative.
+    """
+    # ── Locate the XAI explanation file written by the pipeline ───────────────
+    local_exp_path = os.path.join(
+        OUTPUT_DIR, "xai", "local", f"employee_{req.employee_id}_explanation.json"
+    )
+
+    top_risk_factors = []
+    precomputed_recommendations = None
+    if os.path.exists(local_exp_path):
+        try:
+            with open(local_exp_path, "r") as f:
+                exp_data = json.load(f)
+            top_risk_factors = exp_data.get("top_risk_increasing_factors", [])
+            # Prefer pre-computed recommendations embedded by the pipeline (Phase D)
+            precomputed_recommendations = exp_data.get("rule_recommendations")
+        except Exception as e:
+            print(f"Warning: could not load explanation file: {e}")
+
+    # ── Layer 1: Rule-based recommendations ───────────────────────────────────
+    # Use pre-computed output from the pipeline run if available;
+    # otherwise recompute on-the-fly (e.g., older pipeline run or missing file).
+    if precomputed_recommendations is not None:
+        rule_recommendations = precomputed_recommendations
+    else:
+        # Remap key 'shap_value' → 'impact' for the engine (matches pipeline format)
+        factors_for_engine = [
+            {"feature": f.get("feature", ""), "impact": f.get("shap_value", 0.0)}
+            for f in top_risk_factors
+        ]
+        rule_recommendations = generate_recommendations(
+            top_risk_factors=factors_for_engine,
+            max_recommendations=5,
+        )
+
+    # ── Layer 2: Gemini GenAI narrative ───────────────────────────────────────
+    llm_narrative = None
+    gemini_error = None
+    try:
+        import google.generativeai as genai
+
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY not found in environment variables.")
+
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-2.5-flash")
+
+        employee_metrics = {
+            "role": req.role,
+            "dept": req.dept,
+            "riskScore": req.risk_score,
+            "riskLevelText": req.risk_level_text,
+            "satisfaction": req.satisfaction,
+            "tenure": req.tenure,
+            "overtime": req.overtime,
+            "performance": req.performance,
+        }
+
+        context_block = summarise_for_prompt(
+            employee_name=req.employee_name,
+            employee_metrics=employee_metrics,
+            recommendations=rule_recommendations,
+        )
+
+        prompt = f"""You are an expert HR Business Partner with 15 years of experience in talent retention.
+
+Below is a structured risk profile and evidence-based intervention recommendations for an at-risk employee generated by an AI attrition prediction system.
+
+{context_block}
+
+Using the above structured recommendations as the foundation, generate the following three outputs:
+
+1. EXECUTIVE SUMMARY (2-3 sentences): A concise, non-technical risk summary for senior HR leadership, explaining why this employee's attrition risk is elevated and what the highest-priority intervention domain is.
+
+2. MANAGER CONVERSATION STARTERS (3-4 bullet points): Specific, psychologically-informed talking points for the line manager's next 1:1 with this employee. These should be open-ended questions that surface the root cause without being accusatory.
+
+3. DRAFT RETENTION EMAIL (subject line + body): A professional, empathetic email from the HR Business Partner to the employee inviting them to a confidential career conversation. Tone should be supportive, not alarming.
+
+Format your response with clear section headers: ## Executive Summary, ## Manager Conversation Starters, ## Draft Email."""
+
+        response = model.generate_content(prompt)
+        llm_narrative = response.text
+
+    except Exception as e:
+        gemini_error = str(e)
+        print(f"Gemini API error: {e}")
+
+    return JSONResponse(content={
+        "status": "success",
+        "employee_id": req.employee_id,
+        "employee_name": req.employee_name,
+        "rule_recommendations": rule_recommendations,
+        "llm_narrative": llm_narrative,
+        "gemini_error": gemini_error,
+    })
+
 
 if __name__ == "__main__":
     import uvicorn

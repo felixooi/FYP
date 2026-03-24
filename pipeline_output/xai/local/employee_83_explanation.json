@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 77.6%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-1.58), with SHAP impact 1.971 score units. Additionally, promotions (-1.33) and sick days (1.68) further elevate the risk with SHAP impacts 1.110 and 0.228 respectively.\n\nPositive factors such as tenure performance (ratio) (-1.16) and performance score (0.50) help reduce the overall risk (SHAP impacts -0.922 and -0.295 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_83_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_83_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 1.9705,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Promotions",
+      "action": "Review the employee's promotion history against their peer cohort. If overdue, initiate a formal career conversation and create a 90-day promotion readiness plan with clear, measurable milestones.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 1.1096,
+      "evidence": "Lack of career advancement is the second most cited reason for voluntary turnover in knowledge-worker industries (LinkedIn Workforce Report, 2023)."
+    },
+    {
+      "feature": "Sick_Days",
+      "action": "Elevated sick-day usage is a leading indicator of burnout or disengagement. Initiate a confidential wellbeing conversation. Explore whether workload, workplace conflict, or personal circumstances are contributing.",
+      "category": "engagement",
+      "priority": "recommended",
+      "shap_magnitude": 0.2279,
+      "evidence": "Absenteeism patterns are a validated proxy for engagement levels and predict voluntary turnover with 6-month lead time (Farrell & Stamm, 1988)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "optional",
+      "shap_magnitude": 0.0856,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Burnout_Risk",
+      "action": "Initiate an immediate wellbeing check-in with the employee. Offer access to an Employee Assistance Programme (EAP), temporary workload reduction, and mandatory rest periods. Flag for manager coaching on workload distribution.",
+      "category": "workload",
+      "priority": "optional",
+      "shap_magnitude": 0.0831,
+      "evidence": "Burnout is a critical precursor to voluntary resignation, with studies showing a 3\u20135x higher turnover rate among burned-out employees (Leiter & Maslach, 2009)."
+    }
+  ]
 }

@@ -62,5 +62,47 @@
     }
   ],
   "explanation_text": "This employee is classified as HIGH RISK of attrition (probability: 92.3%).\n\nNote: feature contributions below are SHAP values in model score space, not direct probability percentage points.\n\nThe primary contributing factor is employee satisfaction score (-2.05), with SHAP impact 3.064 score units. Additionally, tenure performance (ratio) (0.95) and burnout risk (1.98) further elevate the risk with SHAP impacts 0.612 and 0.124 respectively.\n\nPositive factors such as promotions (0.51) and training hours (0.31) help reduce the overall risk (SHAP impacts -0.751 and -0.553 respectively). These factors are not enough to move the employee below the current risk threshold.",
-  "contributions_csv": "pipeline_output\\xai\\local\\employee_3_contributions.csv"
+  "contributions_csv": "pipeline_output\\xai\\local\\employee_3_contributions.csv",
+  "rule_recommendations": [
+    {
+      "feature": "Employee_Satisfaction_Score",
+      "action": "Schedule an immediate structured 1:1 stay interview with the employee's manager. Identify specific dissatisfaction drivers. Build a personalised engagement action plan with a 30-day follow-up checkpoint.",
+      "category": "engagement",
+      "priority": "critical",
+      "shap_magnitude": 3.0636,
+      "evidence": "Employee satisfaction is the strongest single-item predictor of retention intent (Harter et al., 2002; Gallup, 2022)."
+    },
+    {
+      "feature": "Tenure_Performance_Ratio",
+      "action": "Recognise long-tenure, high-performing employees with formal career milestone rewards and an accelerated progression plan. Stagnation for high performers is a primary flight risk signal.",
+      "category": "career_growth",
+      "priority": "critical",
+      "shap_magnitude": 0.6123,
+      "evidence": "High tenure with flat progression and strong performance indicates an employee who may feel career-stuck, dramatically increasing departure probability (Allen et al., 2010)."
+    },
+    {
+      "feature": "Burnout_Risk",
+      "action": "Initiate an immediate wellbeing check-in with the employee. Offer access to an Employee Assistance Programme (EAP), temporary workload reduction, and mandatory rest periods. Flag for manager coaching on workload distribution.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.1238,
+      "evidence": "Burnout is a critical precursor to voluntary resignation, with studies showing a 3\u20135x higher turnover rate among burned-out employees (Leiter & Maslach, 2009)."
+    },
+    {
+      "feature": "Work_Hours_Per_Week",
+      "action": "Review total contracted and actual hours. Reduce excess hours via task prioritisation frameworks (e.g., MoSCoW) or additional team resource allocation.",
+      "category": "workload",
+      "priority": "recommended",
+      "shap_magnitude": 0.1008,
+      "evidence": "Consistently high weekly hours degrade cognitive performance and decision-making quality, accelerating disengagement and eventual departure (Pencavel, 2015)."
+    },
+    {
+      "feature": "Performance_Score",
+      "action": "For low performance, investigate root causes (workload? skill gap? manager conflict?) before applying a PIP. For high performers with low satisfaction, focus on recognition and career conversations rather than performance management.",
+      "category": "engagement",
+      "priority": "optional",
+      "shap_magnitude": 0.08,
+      "evidence": "Performance issues that are environmental (not individual) respond to structural changes rather than performance management escalation (Aguinis, 2019)."
+    }
+  ]
 }
