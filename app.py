@@ -421,6 +421,116 @@ Format your response with clear section headers: ## Executive Summary, ## Manage
     })
 
 
+class DeptXaiRequest(BaseModel):
+    department: str  # e.g. "Engineering", "Sales"
+
+
+@app.post("/api/dept-xai")
+async def get_dept_xai_summary(req: DeptXaiRequest):
+    """
+    Department-Level XAI Summary — two-layer approach.
+
+    Layer 1: Returns pre-computed aggregated SHAP summary for the department
+             (written by the pipeline's dept_explanation_generator module).
+    Layer 2: Calls Gemini 2.5 Flash to generate a richer dept-level narrative.
+    """
+    # ── Layer 1: Load pre-computed dept XAI from pipeline output ──────────────
+    dept_xai_dir = os.path.join(OUTPUT_DIR, "xai", "dept")
+    safe_name = req.department.replace(" ", "_").replace("/", "-")
+    dept_file = os.path.join(dept_xai_dir, f"dept_{safe_name}_xai.json")
+
+    dept_summary = None
+    if os.path.exists(dept_file):
+        try:
+            with open(dept_file, "r") as f:
+                dept_summary = json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load dept XAI file: {e}")
+
+    # Fallback: try combined summary file
+    if dept_summary is None:
+        combined_path = os.path.join(dept_xai_dir, "dept_xai_summary.json")
+        if os.path.exists(combined_path):
+            try:
+                with open(combined_path, "r") as f:
+                    all_depts = json.load(f)
+                dept_summary = all_depts.get(req.department)
+            except Exception as e:
+                print(f"Warning: Could not load combined dept XAI: {e}")
+
+    if dept_summary is None:
+        return JSONResponse(status_code=404, content={
+            "status": "error",
+            "message": f"No XAI data found for department '{req.department}'. "
+                       "Please upload and analyse a dataset first via /api/analyze."
+        })
+
+    # ── Layer 2: Gemini dept-level narrative ───────────────────────────────────
+    llm_narrative = None
+    gemini_error = None
+    try:
+        import google.generativeai as genai
+
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY not found in environment variables.")
+
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-2.5-flash")
+
+        top_drivers = dept_summary.get("top_risk_drivers", [])
+        risk_dist   = dept_summary.get("risk_distribution", {})
+        n_employees = dept_summary.get("total_employees_with_xai", 0)
+        avg_risk    = dept_summary.get("avg_attrition_probability", 0)
+
+        drivers_text = "\n".join(
+            f"  {i+1}. {d['feature']} — mean SHAP: {d['mean_shap']:.3f}, "
+            f"affects {d['occurrence_pct']}% of staff"
+            for i, d in enumerate(top_drivers)
+        )
+
+        prompt = f"""You are a senior HR Analytics consultant advising the CHRO of a company.
+
+DEPARTMENT ATTRITION RISK REPORT — {req.department.upper()}
+─────────────────────────────────────────────────────
+Employees analysed: {n_employees}
+Average attrition risk: {avg_risk:.1f}%
+Risk distribution: {risk_dist.get('HIGH', 0)} HIGH | {risk_dist.get('MEDIUM', 0)} MEDIUM | {risk_dist.get('LOW', 0)} LOW
+
+Top shared risk drivers (SHAP-derived, aggregated across employees):
+{drivers_text}
+
+Pipeline-generated summary:
+{dept_summary.get('explanation_text', 'Not available.')}
+─────────────────────────────────────────────────────
+
+Using this data, generate the following three outputs:
+
+## Executive Summary
+2-3 sentences. non-technical. Suitable for senior HR leadership. Explain the department's overall risk posture and the single most actionable finding.
+
+## Key Intervention Domains
+3-4 bullet points. For each top risk driver, recommend a specific, evidence-based department-wide HR intervention (e.g., policy change, structural adjustment, programme rollout). Be concrete.
+
+## Manager Briefing Points
+3 bullet points. Talking points for the department head's next team briefing. Tone: supportive, forward-looking, not alarming."""
+
+        response = model.generate_content(prompt)
+        llm_narrative = response.text
+
+    except Exception as e:
+        gemini_error = str(e)
+        print(f"Gemini dept-xai error: {e}")
+
+    return JSONResponse(content={
+        "status": "success",
+        "department": req.department,
+        "dept_summary": dept_summary,
+        "llm_narrative": llm_narrative,
+        "gemini_error": gemini_error,
+    })
+
+
 if __name__ == "__main__":
     import uvicorn
     # Make sure this runs from the root of the project

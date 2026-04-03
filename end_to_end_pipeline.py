@@ -34,6 +34,7 @@ from modules.explanation_analysis import (
 )
 from modules.explanation_generator import generate_explanation
 from modules.recommendation_engine import generate_recommendations
+from modules.dept_explanation_generator import generate_dept_xai_outputs
 
 
 def _load_artifacts(
@@ -419,6 +420,18 @@ def run_inference_pipeline(
             local_indices=xai_local_indices,
         )
         summary["xai"] = xai_summary
+
+        # ── Department-level XAI aggregation (Phase F) ──────────────────────
+        try:
+            dept_xai = generate_dept_xai_outputs(
+                local_explanation_files=xai_summary.get("local_explanation_files", []),
+                predictions_csv=predictions_path,
+                output_dir=output_dir,
+            )
+            summary["xai"]["dept_summaries"] = dept_xai
+        except Exception as dept_err:
+            print(f"Warning: Department XAI aggregation failed: {dept_err}")
+            summary["xai"]["dept_summaries"] = {}
 
     with open(summary_path, "w") as f:
         json.dump(summary, f, indent=4)
